@@ -8,6 +8,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using TestTaskServices.Interfaces;
 using TestTaskServices.Services;
+using DataAccess.Interfaces;
+using DataAccess.Repositories;
+using DataAccess.Models;
 
 namespace TestTask
 {
@@ -20,13 +23,15 @@ namespace TestTask
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            string connection = Configuration.GetConnectionString("Default Connection");
 
             services.AddDbContext<TestContext>(options =>
                 options.UseSqlServer(connection));
+
             services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<TestContext>()));
             services.AddTransient<ICodeService, CodeService>();
-
+            services.AddTransient<IRepository<Code, int>, CodeRepository>();
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -35,16 +40,14 @@ namespace TestTask
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
+            app.UseCors();
         }
     }
 }

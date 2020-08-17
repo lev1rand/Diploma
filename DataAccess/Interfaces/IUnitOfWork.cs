@@ -6,5 +6,7 @@ namespace DataAccess
     public interface IUnitOfWork
     {
         IRepository<Code, int> Codes { get; }
+
+        void Save();
     }
 }

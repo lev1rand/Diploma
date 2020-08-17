@@ -4,6 +4,6 @@ C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess
 C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfoInputs.cache
 C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfo.cs
 C:\Users\Ira\source\repos\TestTask\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.pdb
-C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CoreCompileInputs.cache
 C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.dll
 C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.pdb
+C:\Users\Ira\source\repos\TestTask\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CoreCompileInputs.cache
