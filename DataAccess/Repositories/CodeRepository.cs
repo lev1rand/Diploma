@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccess.Repositories
 {
-    class CodeRepository
+    public class CodeRepository
     {
     }
 }

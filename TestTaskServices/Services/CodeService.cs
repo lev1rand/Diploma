@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TestTaskServices.Services
 {
-    class CodeService
+    public class CodeService
     {
     }
 }

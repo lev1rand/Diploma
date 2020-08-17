@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccess
 {
-    class UnitOfWork
+    public class UnitOfWork
     {
     }
 }
