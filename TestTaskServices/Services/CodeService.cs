@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TestTaskServices.Interfaces;
 
 namespace TestTaskServices.Services
 {
-    public class CodeService
+    public class CodeService: ICodeService
     {
     }
 }

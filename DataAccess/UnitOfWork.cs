@@ -1,21 +1,23 @@
-﻿using DataAccess.Repositories;
+﻿using DataAccess.Interfaces;
+using DataAccess.Models;
+using DataAccess.Repositories;
 using System;
 
 namespace DataAccess
 {
-    public class UnitOfWork
+    public class UnitOfWork: IUnitOfWork
     {
         #region privateMembers
 
         private TestContext context;
 
-        private CodeRepository codeRepository;
+        private IRepository<Code, int> codeRepository;
 
         private bool isDisposed;
 
         #endregion
 
-        public CodeRepository Codes
+        public IRepository<Code, int> Codes
         {
             get
             {

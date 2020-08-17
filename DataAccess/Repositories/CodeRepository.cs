@@ -1,9 +1,10 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.Interfaces;
+using DataAccess.Models;
 using System.Linq;
 
 namespace DataAccess.Repositories
 {
-    public class CodeRepository
+    public class CodeRepository: IRepository<Code, int>
     {
         #region 
 
@@ -30,6 +31,15 @@ namespace DataAccess.Repositories
         {
             return context.Codes
                 .FirstOrDefault(p => p.Id == id);
+        }
+
+        public void Delete(int id)
+        {
+            Code deleted = context.Codes.Find(id);
+            if (deleted != null)
+            {
+                context.Codes.Remove(deleted);
+            }
         }
 
         public IQueryable<Code> GetAll()
