@@ -1,7 +1,6 @@
 using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,7 +9,9 @@ using TestTaskServices.Interfaces;
 using TestTaskServices.Services;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
-using DataAccess.Models;
+using DataAccess.Entities;
+using AutoMapper;
+using TestTaskServices.Mapping;
 
 namespace TestTask
 {
@@ -32,6 +33,10 @@ namespace TestTask
             services.AddTransient<ICodeService, CodeService>();
             services.AddTransient<IRepository<Code, int>, CodeRepository>();
             services.AddControllers();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new CodeMapperProfile());
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

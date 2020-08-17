@@ -1,6 +1,6 @@
-﻿using DataAccess;
-using DataAccess.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using TestTaskServices.Interfaces;
+using TestTaskServices.Models;
 
 namespace TestTaskAPI.Controllers
 {
@@ -8,19 +8,24 @@ namespace TestTaskAPI.Controllers
     [ApiController]
     public class CodeController : ControllerBase
     {
-        IUnitOfWork uow;
-        public CodeController(IUnitOfWork uow)
+        #region
+
+        private readonly ICodeService codeService;
+
+        #endregion
+
+        public CodeController(ICodeService codeService)
         {
-            this.uow = uow;
+            this.codeService = codeService;
         }
         // POST: api/codes
         [HttpPost]
-        public IActionResult AddCode(Code added)
+        public IActionResult AddCode(CreateCodeModel added)
         {
             try
             {
-                uow.Codes.Create(added);
-                uow.Save();
+                codeService.Create(added);
+
                 return Ok();
             }
             catch
@@ -28,12 +33,13 @@ namespace TestTaskAPI.Controllers
                 return BadRequest();
             }
         }
+        // GET: api/codes
         [HttpGet]
         public IActionResult GetAllCodes()
         {
             try
             {
-                return Ok(uow.Codes.GetAll());
+                return Ok(codeService.GetAll());
             }
             catch
             {
