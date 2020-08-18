@@ -40,11 +40,13 @@ namespace TestTask
             services.AddMvc().AddFluentValidation();
 
             services.AddControllers();
-            
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new CodeMapperProfile());
             });
+            services.AddControllersWithViews()
+                    .AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,6 +1,7 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Entities;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -15,6 +16,7 @@ namespace DataAccess.Repositories
         public CodeRepository(TestContext context)
         {
             this.context = context;
+            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public void Create(Code item)

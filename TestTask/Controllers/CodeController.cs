@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using TestTaskServices.Interfaces;
 using TestTaskServices.Models;
 
@@ -28,23 +30,38 @@ namespace TestTaskAPI.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest();
+                    return BadRequest(e.Message);
             }
         }
-        // GET: api/codes
-        [HttpGet]
-        public IActionResult GetAllCodes()
-        {
-            try
+            // GET: api/codes
+            [HttpGet]
+            public IActionResult GetAllCodes()
             {
-                return Ok(codeService.GetAll());
+                try
+                {
+                    return Ok(codeService.GetAll());
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
-            catch
+            //PATCH: api/codes/5
+            [HttpPatch("{id}")]
+            public IActionResult UpdateCode(int id, [FromBody] JsonPatchDocument<UpdateCodeModel> item)
             {
-                return BadRequest();
+                try
+                {
+                    codeService.UpdatePatch(id, item);
+
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
             }
-        }
     }
 }

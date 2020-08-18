@@ -1,26 +1,41 @@
 ﻿using FluentValidation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TestTaskServices.Models;
 
 namespace TestTaskServices.Validation
 {
     public class UpdateCodeValidator : AbstractValidator<UpdateCodeModel>
     {
+        #region 
+
+        private const int MAX_NAME_LENGTH = 1073741791;
+
+        #endregion
         public UpdateCodeValidator()
         {
+            RuleFor(n => n.Name)
+                .NotNull()
+                .Length(1, 1073741791)
+                .Custom((s, valContext) =>
+                {
+                    if (s != null)
+                    {
+                        string checkedName = s;
+
+                        bool isAllChars() => s.All(char.IsWhiteSpace);
+
+                        if (isAllChars())
+                        {
+                            valContext.AddFailure("You should input text!");
+                        }
+                    }
+                });
             RuleFor(x => x.Id)
                 .NotNull();
 
-            RuleFor(u => u.Name)
-                .NotNull()
-                .When(w => w.Number == null);
-
             RuleFor(u => u.Number)
                 .NotNull()
-                .When(w => w.Name == null)
                 .Length(3)
                 .WithMessage("Length {TotalLength} of {PropertyName} is invalid")
                 .Custom((n, valContext) =>
@@ -37,6 +52,8 @@ namespace TestTaskServices.Validation
                         }
                     }
                 });
+
+            
         }
     }
 }

@@ -13,6 +13,9 @@ namespace TestTaskServices.Mapping
 
             CreateMap<Code, UpdateCodeModel>()
                 .ReverseMap();
+
+            CreateMap<Code, CodeModel>()
+                .ReverseMap();
         }
     }
 }
