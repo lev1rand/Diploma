@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "cgwlFRsPAaN1YNYfUsB5m8O/lU2L6eQt0blY2oHCD06BfoYY+xnU+ZAjd9+ViSkJZe0+kNhuCSXVf+pDilne2w==",
+  "dgSpecHash": "fEgMlHKkTiKtbGbfrf7hbHTcqNXwFYUuLesDf7BKSQxrEQhJelNwPFl9od3UjG0nOTut9UfATjg5cBWT7UVzbQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ira\\.nuget\\packages\\automapper\\10.0.0\\automapper.10.0.0.nupkg.sha512",
     "C:\\Users\\Ira\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.0.1\\automapper.extensions.microsoft.dependencyinjection.8.0.1.nupkg.sha512",
+    "C:\\Users\\Ira\\.nuget\\packages\\fluentvalidation\\9.1.2\\fluentvalidation.9.1.2.nupkg.sha512",
+    "C:\\Users\\Ira\\.nuget\\packages\\fluentvalidation.aspnetcore\\9.1.2\\fluentvalidation.aspnetcore.9.1.2.nupkg.sha512",
+    "C:\\Users\\Ira\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\9.1.2\\fluentvalidation.dependencyinjectionextensions.9.1.2.nupkg.sha512",
     "C:\\Users\\Ira\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\Ira\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.0\\microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "C:\\Users\\Ira\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

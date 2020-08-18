@@ -12,6 +12,8 @@ using DataAccess.Repositories;
 using DataAccess.Entities;
 using AutoMapper;
 using TestTaskServices.Mapping;
+using FluentValidation.AspNetCore;
+using TestTaskServices.Validation;
 
 namespace TestTask
 {
@@ -32,7 +34,13 @@ namespace TestTask
             services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<TestContext>()));
             services.AddTransient<ICodeService, CodeService>();
             services.AddTransient<IRepository<Code, int>, CodeRepository>();
+
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateCodeValidator>());
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UpdateCodeValidator>());
+            services.AddMvc().AddFluentValidation();
+
             services.AddControllers();
+            
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new CodeMapperProfile());
