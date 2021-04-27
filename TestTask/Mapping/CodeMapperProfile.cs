@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataAccess.Entities;
 using TestTaskServices.Models;
+using TestTaskAPI.Models;
 
 namespace TestTaskServices.Mapping
 {
@@ -16,6 +17,9 @@ namespace TestTaskServices.Mapping
 
             CreateMap<Code, CodeModel>()
                 .ReverseMap();
+
+            CreateMap<TestTaskAPI.Models.SignInModel, CreateTokenModel>()
+                    .ReverseMap();
         }
     }
 }

@@ -19,9 +19,9 @@ namespace TestTaskServices.Services
 
         private readonly MapperService mapper;
 
-        private readonly CreateCodeValidator createValidator;
+        private readonly CreateUserValidator createValidator;
 
-        private readonly UpdateCodeValidator updateValidator;
+        private readonly UpdateUserValidator updateValidator;
 
         #endregion
 
@@ -29,8 +29,8 @@ namespace TestTaskServices.Services
         {
             this.uow = uow;
             mapper = new MapperService();
-            createValidator = new CreateCodeValidator();
-            updateValidator = new UpdateCodeValidator();
+            createValidator = new CreateUserValidator();
+            updateValidator = new UpdateUserValidator();
         }
 
         public IEnumerable<CodeModel> GetAll()

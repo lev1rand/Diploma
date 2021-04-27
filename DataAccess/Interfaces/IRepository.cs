@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccess.Interfaces
 {
@@ -7,6 +10,7 @@ namespace DataAccess.Interfaces
     {
         IQueryable<T> GetAll();
         T Get(K id);
+        List<T> GetByPredicate(Expression<Func<T, bool>> predicate = null);
         void Create(T item);
         void Update(T item);
         void Delete(K id);

@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTask\\TestTaskAPI.csproj": {}
+    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTask\\TestTaskAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj": {
+    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
         "projectName": "DataAccess",
-        "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj",
-        "packagesPath": "C:\\Users\\Ira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\obj\\",
+        "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
+        "packagesPath": "C:\\Users\\iryna.levdyk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Ira\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\iryna.levdyk\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,6 +29,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +41,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
@@ -82,28 +87,28 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "F:\\Programs\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTaskServices\\TestTaskServices.csproj": {
+    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTaskServices\\TestTaskServices.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTaskServices\\TestTaskServices.csproj",
+        "projectUniqueName": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTaskServices\\TestTaskServices.csproj",
         "projectName": "TestTaskServices",
-        "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTaskServices\\TestTaskServices.csproj",
-        "packagesPath": "C:\\Users\\Ira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTaskServices\\obj\\",
+        "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTaskServices\\TestTaskServices.csproj",
+        "packagesPath": "C:\\Users\\iryna.levdyk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTaskServices\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Ira\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\iryna.levdyk\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -115,9 +120,10 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj": {
-                "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj"
+              "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {
+                "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj"
               }
             }
           }
@@ -130,6 +136,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
@@ -166,6 +173,10 @@
             "Microsoft.EntityFrameworkCore.SqlServer.Design": {
               "target": "Package",
               "version": "[1.1.6, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
             }
           },
           "imports": [
@@ -179,28 +190,28 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "F:\\Programs\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTask\\TestTaskAPI.csproj": {
+    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTask\\TestTaskAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTask\\TestTaskAPI.csproj",
+        "projectUniqueName": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTask\\TestTaskAPI.csproj",
         "projectName": "TestTaskAPI",
-        "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTask\\TestTaskAPI.csproj",
-        "packagesPath": "C:\\Users\\Ira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTask\\obj\\",
+        "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTask\\TestTaskAPI.csproj",
+        "packagesPath": "C:\\Users\\iryna.levdyk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTask\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Ira\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\iryna.levdyk\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -212,12 +223,13 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj": {
-                "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj"
+              "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {
+                "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj"
               },
-              "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTaskServices\\TestTaskServices.csproj": {
-                "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\TestTaskServices\\TestTaskServices.csproj"
+              "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTaskServices\\TestTaskServices.csproj": {
+                "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\TestTaskServices\\TestTaskServices.csproj"
               }
             }
           }
@@ -230,6 +242,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
@@ -242,6 +255,10 @@
             "FluentValidation.AspNetCore": {
               "target": "Package",
               "version": "[9.1.2, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.10, )"
             },
             "Microsoft.AspNetCore.JsonPatch": {
               "target": "Package",
@@ -282,7 +299,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "F:\\Programs\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,18 +1,17 @@
 ﻿using FluentValidation;
-using System;
 using System.Linq;
 using TestTaskServices.Models;
 
 namespace TestTaskServices.Validation
 {
-    public class UpdateCodeValidator : AbstractValidator<UpdateCodeModel>
+    public class UpdateUserValidator : AbstractValidator<UpdateCodeModel>
     {
         #region 
 
         private const int MAX_NAME_LENGTH = 1073741791;
 
         #endregion
-        public UpdateCodeValidator()
+        public UpdateUserValidator()
         {
             RuleFor(n => n.Name)
                 .NotNull()
@@ -34,7 +33,7 @@ namespace TestTaskServices.Validation
             RuleFor(x => x.Id)
                 .NotNull();
 
-            RuleFor(u => u.Number)
+            /*RuleFor(u => u.Number)
                 .NotNull()
                 .Length(3)
                 .WithMessage("Length {TotalLength} of {PropertyName} is invalid")
@@ -51,7 +50,7 @@ namespace TestTaskServices.Validation
                             valContext.AddFailure("You should input only numbers!");
                         }
                     }
-                });
+                });*/
 
             
         }

@@ -13,6 +13,8 @@ namespace DataAccess
 
         private IRepository<Code, int> codeRepository;
 
+        private IRepository<User, int> userRepository;
+
         private bool isDisposed;
 
         #endregion
@@ -25,6 +27,17 @@ namespace DataAccess
                     codeRepository = new CodeRepository(context);
 
                 return codeRepository;
+            }
+        }
+
+        public IRepository<User, int> Users
+        {
+            get
+            {
+                if (userRepository == null)
+                    codeRepository = new CodeRepository(context);
+
+                return userRepository;
             }
         }
 

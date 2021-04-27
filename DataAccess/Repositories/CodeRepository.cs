@@ -2,10 +2,13 @@
 using DataAccess.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System;
+using System.Collections.Generic;
 
 namespace DataAccess.Repositories
 {
-    public class CodeRepository: IRepository<Code, int>
+    public class CodeRepository : IRepository<Code, int>
     {
         #region 
 
@@ -47,6 +50,11 @@ namespace DataAccess.Repositories
         public IQueryable<Code> GetAll()
         {
             return context.Codes;
+        }
+
+        public List<Code> GetByPredicate(Expression<Func<Code, bool>> predicate = null)
+        {
+            return null;
         }
     }
 }

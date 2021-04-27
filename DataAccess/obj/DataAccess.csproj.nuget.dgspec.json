@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj": {}
+    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj": {
+    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
         "projectName": "DataAccess",
-        "projectPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\DataAccess.csproj",
-        "packagesPath": "C:\\Users\\Ira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ira\\source\\repos\\TestTask\\DataAccess\\obj\\",
+        "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
+        "packagesPath": "C:\\Users\\iryna.levdyk\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Ira\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\iryna.levdyk\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,6 +29,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +41,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
@@ -82,14 +87,11 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "F:\\Programs\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
