@@ -21,16 +21,17 @@ namespace TestTaskServices.Services
             this.uow = uow;
             this.userService = userService;
         }
-        public void CreateAccount(CreateAccountModel account)
+        public int CreateAccount(CreateAccountModel account)
         {
-            if (uow.Users.GetByPredicate(u => u.Login == account.Login).Count > 0)
-            {
-                throw new Exception(string.Format("User with login {0} already exists!", account.Login));
-            }
-            else
-            {
-                userService.CreateUser(account);
+                if (uow.Users.GetByPredicate(u => u.Login == account.Login).Count > 0)
+                {
+                    throw new Exception(string.Format("User with login {0} already exists!", account.Login));
+                }
+                else
+                {
+                    return userService.CreateUser(account);
+                }
             }
         }
     }
-}
+

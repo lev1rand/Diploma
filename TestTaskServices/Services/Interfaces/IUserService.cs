@@ -5,7 +5,7 @@ namespace TestTaskServices.Services.Interfaces
 {
     public interface IUserService
     {
-        public void CreateUser(CreateAccountModel model);
+        public int CreateUser(CreateAccountModel model);
         public CreateAccountModel GetUserById(int id);
         public IEnumerable<CreateAccountModel> GetAll();
     }

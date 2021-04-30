@@ -13,10 +13,10 @@ namespace DataAccess
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Code>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity
-                .ToTable("Codes")
+                .ToTable("User")
                 .HasKey(k => k.Id);
 
                 entity
@@ -29,9 +29,23 @@ namespace DataAccess
                 .IsRequired();
 
                 entity
-                .Property(p => p.Number).HasColumnName("Number")
-                .HasMaxLength(3)
+                .Property(p => p.Login).HasColumnName("Login")
                 .IsRequired();
+
+                entity
+                .Property(p => p.Password)
+                .HasColumnName("PasswordHash")
+                .IsRequired();
+
+                entity
+               .Property(p => p.IsEmailVerified)
+               .HasColumnName("IsEmailVerified")
+               .IsRequired();
+
+                entity
+               .Property(p => p.Salt)
+               .HasColumnName("HashingSalt")
+               .IsRequired();
 
             });
 

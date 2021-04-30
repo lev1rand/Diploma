@@ -17,11 +17,14 @@ using TestTaskServices.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using DataAccess.Authentification;
+using TestTaskServices.Services.Interfaces;
+using System;
 
 namespace TestTask
 {
     public class Startup
     {
+        private const int SESSION_EXPIRATION_TIME_IN_MINUTES = 60;
         public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
@@ -36,13 +39,19 @@ namespace TestTask
 
             services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<TestContext>()));
             services.AddTransient<ICodeService, CodeService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IJWTManagmentService, JWTManagmentService>();
+            services.AddTransient<IEmailVerificator, EmailVerificator>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRepository<User, int>, UserRepository>();
             services.AddTransient<IRepository<Code, int>, CodeRepository>();
 
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserValidator>());
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UpdateUserValidator>());
             services.AddMvc().AddFluentValidation();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -76,6 +85,11 @@ namespace TestTask
 
             services.AddControllersWithViews()
                     .AddNewtonsoftJson();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(SESSION_EXPIRATION_TIME_IN_MINUTES);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -86,7 +100,7 @@ namespace TestTask
             }
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -98,3 +112,4 @@ namespace TestTask
         }
     }
 }
+

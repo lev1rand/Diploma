@@ -35,7 +35,7 @@ namespace DataAccess
             get
             {
                 if (userRepository == null)
-                    codeRepository = new CodeRepository(context);
+                    userRepository = new UserRepository(context);
 
                 return userRepository;
             }

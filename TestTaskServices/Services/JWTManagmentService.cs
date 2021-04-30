@@ -1,12 +1,10 @@
 ﻿using DataAccess;
 using DataAccess.Authentification;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using TestTaskServices.Models;
 using TestTaskServices.Services.Interfaces;
 
@@ -28,7 +26,7 @@ namespace TestTaskServices.Services
             mapper = new MapperService();
         }
 
-        public string CreateToken(CreateTokenModel createTokenModel)
+        public AuthResponseModel CreateToken(CreateTokenModel createTokenModel)
         {
             var identity = GetIdentity(createTokenModel.Login, createTokenModel.Password);
 
@@ -37,25 +35,25 @@ namespace TestTaskServices.Services
                 throw new Exception("Invalid username or password.");
             }
 
-            var now = DateTime.UtcNow;
+            var encodedJwt = GenerateAccessToken();
 
-            // создаем JWT-токен
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var user = uow.Users.GetByPredicate(u => u.Login == identity.Name)[0];
 
-            var response = new
+            AuthResponseModel response = new AuthResponseModel
             {
-                access_token = encodedJwt,
-                username = identity.Name
+                AccessToken = encodedJwt,
+                RefreshToken = GenerateRefreshToken(),
+                UserLogin = user.Login,
+                UserName = user.Name,
+                UserId = user.Id.ToString()
             };
 
-            return JsonConvert.SerializeObject(response);
+            return response;
+        }
+
+        public string RefreshAccessToken()
+        {
+            return GenerateAccessToken();
         }
 
         public void RemoveToken(RemoveTokenModel removeTokenModel)
@@ -63,9 +61,9 @@ namespace TestTaskServices.Services
 
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private ClaimsIdentity GetIdentity(string userName, string password)
         {
-            var users = uow.Users.GetByPredicate(x => x.Login == username && x.Password == password);
+            var users = uow.Users.GetByPredicate(x => x.Login == userName && x.Password == password);
             if (users != null && users.Count < 2)
             {
                 var claims = new List<Claim>
@@ -78,14 +76,25 @@ namespace TestTaskServices.Services
                     ClaimsIdentity.DefaultRoleClaimType);
                 return claimsIdentity;
             }
-
-            // если пользователь не найден
-            return null;
+            else
+            {
+                throw new KeyNotFoundException("User wasn't found!");
+            }
         }
-
-        public string RefreshToken()
+        private string GenerateAccessToken()
         {
-            return null;
+            var jwt = new JwtSecurityToken(
+                   issuer: AuthOptions.ISSUER,
+                   audience: AuthOptions.AUDIENCE,
+                   notBefore: DateTime.UtcNow,
+                   expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                   signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+        private string GenerateRefreshToken()
+        {
+            return Guid.NewGuid().ToString().Replace("-", string.Empty);
         }
     }
 }
