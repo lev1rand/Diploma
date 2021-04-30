@@ -54,19 +54,5 @@ namespace TestTaskAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        // GET: api/account
-       /* [HttpGet]
-        public IActionResult GetAllAccounts()
-        {
-            try
-            {
-                return Ok(accountService.GetAll());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }*/
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
 using TestTaskServices.Models;
-using TestTaskServices.Services;
 using TestTaskServices.Services.Interfaces;
 
 namespace TestTaskAPI.Controllers

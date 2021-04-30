@@ -13,9 +13,8 @@ namespace TestTaskServices.Services
 
         private readonly IUserService userService;
 
-        private readonly MapperService mapper;
-
         #endregion
+
         public AccountService(IUnitOfWork uow, IUserService userService)
         {
             this.uow = uow;

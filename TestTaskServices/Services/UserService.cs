@@ -1,10 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using TestTaskServices.Models;
 using TestTaskServices.Services.Interfaces;
 using TestTaskServices.Validation;
@@ -67,7 +64,6 @@ namespace TestTaskServices.Services
         {
             return mapper.Map<Code, CodeModel>(uow.Codes.Get(id));
         }
-
     }
 }
 

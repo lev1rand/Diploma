@@ -12,11 +12,11 @@ namespace DataAccess.Repositories
     {
         #region 
 
-        private readonly TestContext context;
+        private readonly AppContext context;
 
         #endregion
 
-        public UserRepository(TestContext context)
+        public UserRepository(AppContext context)
         {
             this.context = context;
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;

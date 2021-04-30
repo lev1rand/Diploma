@@ -34,10 +34,10 @@ namespace TestTask
         {
             string connection = Configuration.GetConnectionString("Default Connection");
 
-            services.AddDbContext<TestContext>(options =>
+            services.AddDbContext<DataAccess.AppContext>(options =>
                 options.UseSqlServer(connection));
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<TestContext>()));
+            services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<DataAccess.AppContext>()));
             services.AddTransient<ICodeService, CodeService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAuthService, AuthService>();

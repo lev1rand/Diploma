@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess
 {
-    public class TestContext : DbContext
+    public class AppContext : DbContext
     {
         public DbSet<Code> Codes { get; set; }
         public DbSet<User> Users { get; set; }
-        public TestContext(DbContextOptions<TestContext> options) : base(options)
+        public AppContext(DbContextOptions<AppContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

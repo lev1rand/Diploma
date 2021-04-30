@@ -9,26 +9,13 @@ namespace DataAccess
     {
         #region privateMembers
 
-        private TestContext context;
-
-        private IRepository<Code, int> codeRepository;
+        private AppContext context;
 
         private IRepository<User, int> userRepository;
 
         private bool isDisposed;
 
         #endregion
-
-        public IRepository<Code, int> Codes
-        {
-            get
-            {
-                if (codeRepository == null)
-                    codeRepository = new CodeRepository(context);
-
-                return codeRepository;
-            }
-        }
 
         public IRepository<User, int> Users
         {
@@ -41,7 +28,7 @@ namespace DataAccess
             }
         }
 
-        public UnitOfWork(TestContext context)
+        public UnitOfWork(AppContext context)
         {
             this.context = context;
             isDisposed = false;

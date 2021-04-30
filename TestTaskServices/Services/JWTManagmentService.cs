@@ -16,14 +16,11 @@ namespace TestTaskServices.Services
 
         private readonly IUnitOfWork uow;
 
-        private readonly MapperService mapper;
-
         #endregion
 
         public JWTManagmentService(IUnitOfWork uow)
         {
             this.uow = uow;
-            mapper = new MapperService();
         }
 
         public AuthResponseModel CreateToken(CreateTokenModel createTokenModel)
