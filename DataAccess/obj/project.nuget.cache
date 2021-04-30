@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "n7q8DwCiWSnfVzL7niIe6H9wFKGqoqXrMPsDciH16nSajpG7CrVV+BrTD4QKgsA7joyL73oJXWklmNDyBBKx6A==",
+  "dgSpecHash": "SuvMEKXY1l5qOy++sF+vcxnaud0Er5MP4i7rPnxIWidFchkMjqLO/Z46FLc6YebEAReUzy1WCA4RxzE01xIGYQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
+  "projectFilePath": "C:\\Users\\iryna.levdyk\\Documents\\Diploma\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\iryna.levdyk\\.nuget\\packages\\automapper\\10.0.0\\automapper.10.0.0.nupkg.sha512",
     "C:\\Users\\iryna.levdyk\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.0.1\\automapper.extensions.microsoft.dependencyinjection.8.0.1.nupkg.sha512",

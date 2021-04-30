@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {}
+    "C:\\Users\\iryna.levdyk\\Documents\\Diploma\\DataAccess\\DataAccess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj": {
+    "C:\\Users\\iryna.levdyk\\Documents\\Diploma\\DataAccess\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\iryna.levdyk\\Documents\\Diploma\\DataAccess\\DataAccess.csproj",
         "projectName": "DataAccess",
-        "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\DataAccess.csproj",
+        "projectPath": "C:\\Users\\iryna.levdyk\\Documents\\Diploma\\DataAccess\\DataAccess.csproj",
         "packagesPath": "C:\\Users\\iryna.levdyk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\iryna.levdyk\\Documents\\TestTask\\DataAccess\\obj\\",
+        "outputPath": "C:\\Users\\iryna.levdyk\\Documents\\Diploma\\DataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

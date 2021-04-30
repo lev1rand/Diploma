@@ -1,6 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\CommonTools",
+    "\\CommonTools\\Extensions",
+    "\\DataAccess",
+    "\\Diploma",
+    "\\DiplomaServices"
   ],
+  "SelectedNode": "\\Diploma\\Diploma.sln",
   "PreviewInSolutionExplorer": false
 }
