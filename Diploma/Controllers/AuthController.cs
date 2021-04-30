@@ -50,7 +50,10 @@ namespace DiplomaAPI.Controllers
         {
             try
             {
+                var userId = Convert.ToInt32(new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userId"))));
+                signOut.UserId = userId;
                 authService.SignOut(signOut);
+
                 HttpContext.Session.Clear();
 
                 return Ok();

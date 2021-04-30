@@ -34,5 +34,8 @@ namespace DataAccess.Entities
 
         [Required]
         public int Role { get; set; }
+
+        [DefaultValue(null)]
+        public string AccessToken { get; set; }
     }
 }

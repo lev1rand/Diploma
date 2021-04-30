@@ -45,6 +45,10 @@ namespace DiplomaServices.Services
                 UserId = user.Id.ToString()
             };
 
+            user.AccessToken = response.AccessToken;
+            uow.Users.Update(user);
+            uow.Save();
+            
             return response;
         }
 
@@ -55,7 +59,10 @@ namespace DiplomaServices.Services
 
         public void RemoveToken(RemoveTokenModel removeTokenModel)
         {
-
+            var user = uow.Users.Get(removeTokenModel.UserId);
+            user.AccessToken = null;
+            uow.Users.Update(user);
+            uow.Save();
         }
 
         private ClaimsIdentity GetIdentity(string userName, string password)

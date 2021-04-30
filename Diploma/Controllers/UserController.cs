@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using DiplomaServices.Services.Interfaces;
+using DiplomaAPI.Filters;
 
 namespace DiplomaAPI.Controllers
 {
     [Route("api/users")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [TypeFilter(typeof(AuthFilter))]
     [ApiController]
     public class UserController : ControllerBase
     {
