@@ -41,7 +41,7 @@ namespace DiplomaServices.Services
         }
         public CreateAccountModel GetUserById(int id)
         {
-            return mapper.Map<User, CreateAccountModel>(uow.Users.Get(id));
+            return mapper.Map<User, CreateAccountModel>(uow.Users.Get(u => u.Id == id));
         }
         public IEnumerable<CreateAccountModel> GetAll()
         {

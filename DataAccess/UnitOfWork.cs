@@ -1,7 +1,6 @@
-﻿using DataAccess.Interfaces;
-using DataAccess.Entities;
-using DataAccess.Repositories;
+﻿using DataAccess.Repositories;
 using System;
+using DataAccess.Interfaces.Repositories;
 
 namespace DataAccess
 {
@@ -11,13 +10,19 @@ namespace DataAccess
 
         private AppContext context;
 
-        private IRepository<User, int> userRepository;
+        private IUserRepository userRepository;
+        private ICourseRepository courseRepository;
+        private IUserAnswerRepository userAnswersRepository;
+        private ITestRepository testRepository;
+        private IQuestionRepository questionRepository;
+        private IRightSimpleAnswerRepository rightSimpleAnswerRepository;
+        private IResponseOptionRepository responseOptionRepository;
 
         private bool isDisposed;
 
         #endregion
 
-        public IRepository<User, int> Users
+        public IUserRepository Users
         {
             get
             {
@@ -25,6 +30,72 @@ namespace DataAccess
                     userRepository = new UserRepository(context);
 
                 return userRepository;
+            }
+        }
+
+        public ICourseRepository Courses
+        {
+            get
+            {
+                if (courseRepository == null)
+                    courseRepository = new CourseRepository(context);
+
+                return courseRepository;
+            }
+        }
+
+        public ITestRepository Tests
+        {
+            get
+            {
+                if (testRepository == null)
+                    testRepository = new TestRepository(context);
+
+                return testRepository;
+            }
+        }
+
+        public IQuestionRepository Questions
+        {
+            get
+            {
+                if (questionRepository == null)
+                    questionRepository = new QuestionRepository(context);
+
+                return questionRepository;
+            }
+        }
+
+        public IResponseOptionRepository ResponseOptions
+        {
+            get
+            {
+                if (responseOptionRepository == null)
+                    responseOptionRepository = new ResponseOptionRepository(context);
+
+                return responseOptionRepository;
+            }
+        }
+
+        public IRightSimpleAnswerRepository RightSimpleAnswers
+        {
+            get
+            {
+                if (rightSimpleAnswerRepository == null)
+                    rightSimpleAnswerRepository = new RightSimpleAnswerRepository(context);
+
+                return rightSimpleAnswerRepository;
+            }
+        }
+
+        public IUserAnswerRepository UserAnswers
+        {
+            get
+            {
+                if (userAnswersRepository == null)
+                    userAnswersRepository = new UserAnswerRepository(context);
+
+                return userAnswersRepository;
             }
         }
 

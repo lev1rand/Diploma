@@ -44,7 +44,7 @@ namespace DiplomaServices.Services.Interfaces
         }
         public void SetEmailAsVerified(int userId)
         {
-            var user = uow.Users.Get(userId);
+            var user = uow.Users.Get(u=>u.Id == userId);
             user.IsEmailVerified = true;
             uow.Users.Update(user);
 

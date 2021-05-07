@@ -8,8 +8,8 @@ using DiplomaAPI.Filters;
 namespace DiplomaAPI.Controllers
 {
     [Route("api/users")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [TypeFilter(typeof(AuthFilter))]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class UserController : ControllerBase
     {

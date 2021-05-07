@@ -32,6 +32,7 @@ namespace DiplomaAPI.Controllers
                 var response = authService.SignIn(signIn);
 
                 HttpContext.Session.Set("refreshToken", Encoding.ASCII.GetBytes(response.RefreshToken));
+                HttpContext.Session.Set("accessToken", Encoding.ASCII.GetBytes(response.AccessToken));
                 HttpContext.Session.Set("userLogin", Encoding.ASCII.GetBytes(response.UserLogin));
                 HttpContext.Session.Set("userName", Encoding.ASCII.GetBytes(response.UserName));
                 HttpContext.Session.Set("userId", Encoding.ASCII.GetBytes(response.UserId));
@@ -78,26 +79,15 @@ namespace DiplomaAPI.Controllers
                     if (refreshFromSession == incomingRefresh)
                     {
                         var accessToken = authService.RefreshAccessToken();
-                        var login = new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userLogin")));
-                        var name = new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userName")));
-                        var userId = new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userId")));
+                        HttpContext.Session.Set("accessToken", Encoding.ASCII.GetBytes(accessToken));
 
-                        AuthResponseModel responseModel = new AuthResponseModel
-                        {
-                            AccessToken = accessToken,
-                            UserLogin = login,
-                            UserName = name,
-                            UserId = userId,
-                            RefreshToken = refreshFromSession
-                        };
-
-                        return Ok(responseModel);
+                        return Ok(new { AccessToken = accessToken });
                     }
                     else
                     {
-                        //Method not allowed: we can't give new access if refresh token wasn't found
+                        //We can't give new access if refresh token wasn't found
 
-                        return StatusCode(405);
+                        return BadRequest("Your refresh token isn't right, access denied");
                     }
                 }
 

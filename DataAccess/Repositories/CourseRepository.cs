@@ -3,11 +3,11 @@ using DataAccess.Interfaces.Repositories;
 
 namespace DataAccess.Repositories
 {
-    public class UserRepository : CommonRepository<User>, IUserRepository
+    public class CourseRepository : CommonRepository<Course>, ICourseRepository
     {
         private readonly AppContext context;
 
-        public UserRepository(AppContext context) : base(context)
+        public CourseRepository(AppContext context) : base(context)
         {
             this.context = context;
         }

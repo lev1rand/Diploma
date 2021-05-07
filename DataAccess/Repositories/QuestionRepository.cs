@@ -1,13 +1,13 @@
-﻿using DataAccess.Entities;
+﻿using DataAccess.Entities.Test;
 using DataAccess.Interfaces.Repositories;
 
 namespace DataAccess.Repositories
 {
-    public class UserRepository : CommonRepository<User>, IUserRepository
+    public class QuestionRepository : CommonRepository<Question>, IQuestionRepository
     {
         private readonly AppContext context;
 
-        public UserRepository(AppContext context) : base(context)
+        public QuestionRepository(AppContext context) : base(context)
         {
             this.context = context;
         }

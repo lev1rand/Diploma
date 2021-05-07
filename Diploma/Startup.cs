@@ -5,9 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Interfaces;
 using DataAccess.Repositories;
-using DataAccess.Entities;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +15,7 @@ using System;
 using DiplomaServices.Services.Interfaces;
 using DiplomaServices.Services;
 using DiplomaServices.Mapping;
+using DataAccess.Interfaces.Repositories;
 
 namespace Diploma
 {
@@ -36,12 +35,20 @@ namespace Diploma
                 options.UseSqlServer(connection));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<DataAccess.AppContext>()));
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<IQuestionRepository, QuestionRepository>();
+            services.AddTransient<IResponseOptionRepository, ResponseOptionRepository>();
+            services.AddTransient<IRightSimpleAnswerRepository, RightSimpleAnswerRepository>();
+            services.AddTransient<ITestRepository, TestRepository>();
+            services.AddTransient<IUserAnswerRepository, UserAnswerRepository>();
+
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IJWTManagmentService, JWTManagmentService>();
             services.AddTransient<IEmailVerificator, EmailVerificator>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRepository<User, int>, UserRepository>();
+
 
             services.AddMvc().AddFluentValidation();
 

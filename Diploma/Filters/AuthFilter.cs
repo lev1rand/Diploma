@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using System.Text;
 
 namespace DiplomaAPI.Filters
 {
@@ -9,7 +10,13 @@ namespace DiplomaAPI.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if(context.HttpContext.Session.Get("userId") == null)
+            var accessToken = context.HttpContext.Request.Headers["Authorization"]
+                .ToString()
+                .Replace("Bearer ", "");
+            var accessTokenFromSession = new string(Encoding.ASCII.GetChars(context.HttpContext.Session.Get("accessToken")));
+
+            if (context.HttpContext.Session.Get("userId") == null ||
+                accessTokenFromSession != accessToken)
             {
                 context.Result = new UnauthorizedResult();
             }
@@ -17,7 +24,7 @@ namespace DiplomaAPI.Filters
 
         public void OnAuthorizationExecuted(AuthorizationFilterContext context)
         {
-            
+
         }
     }
 }

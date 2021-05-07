@@ -59,7 +59,7 @@ namespace DiplomaServices.Services
 
         public void RemoveToken(RemoveTokenModel removeTokenModel)
         {
-            var user = uow.Users.Get(removeTokenModel.UserId);
+            var user = uow.Users.Get(u=>u.Id == removeTokenModel.UserId);
             user.AccessToken = null;
             uow.Users.Update(user);
             uow.Save();
