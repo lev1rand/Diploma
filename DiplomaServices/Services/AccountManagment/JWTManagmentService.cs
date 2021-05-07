@@ -8,7 +8,7 @@ using System.Security.Claims;
 using DiplomaServices.Models;
 using DiplomaServices.Services.Interfaces;
 
-namespace DiplomaServices.Services
+namespace DiplomaServices.Services.AccountManagment
 {
     public class JWTManagmentService : IJWTManagmentService
     {

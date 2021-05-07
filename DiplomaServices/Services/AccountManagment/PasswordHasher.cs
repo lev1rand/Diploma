@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using DiplomaServices.Models;
 
-namespace DiplomaServices.Services
+namespace DiplomaServices.Services.AccountManagment
 {
     public class PasswordHasher
     {

@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 
-namespace DiplomaServices.Services.Interfaces
+namespace DiplomaServices.Services.AccountManagment
 {
     public class EmailVerificator : IEmailVerificator
     {

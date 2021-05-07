@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using System.Linq;
-using DiplomaServices.Mapping;
 
-namespace DiplomaServices.Services
+namespace DiplomaServices.Mapping
 {
     public class MapperService
     {

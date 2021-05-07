@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DiplomaServices.Models;
 
-namespace DiplomaServices.Services.Interfaces
+namespace DiplomaServices.Interfaces
 {
     public interface IUserService
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using DiplomaServices.Models;
 using DiplomaServices.Services.Interfaces;
 
-namespace DiplomaServices.Services
+namespace DiplomaServices.Services.AccountManagment
 {
     public class UserService: IUserService
     {

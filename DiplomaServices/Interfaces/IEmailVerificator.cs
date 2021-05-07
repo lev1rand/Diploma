@@ -1,4 +1,4 @@
-﻿namespace DiplomaServices.Services.Interfaces
+﻿namespace DiplomaServices.Interfaces
 {
     public interface IEmailVerificator
     {

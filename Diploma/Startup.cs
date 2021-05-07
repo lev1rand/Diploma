@@ -13,9 +13,9 @@ using Microsoft.IdentityModel.Tokens;
 using DataAccess.Authentification;
 using System;
 using DiplomaServices.Services.Interfaces;
-using DiplomaServices.Services;
 using DiplomaServices.Mapping;
 using DataAccess.Interfaces.Repositories;
+using DiplomaServices.Services.AccountManagment;
 
 namespace Diploma
 {
