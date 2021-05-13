@@ -17,6 +17,7 @@ namespace DataAccess
         private IQuestionRepository questionRepository;
         private IRightSimpleAnswerRepository rightSimpleAnswerRepository;
         private IResponseOptionRepository responseOptionRepository;
+        private IUsersCoursesRepository usersCoursesRepository;
 
         private bool isDisposed;
 
@@ -96,6 +97,17 @@ namespace DataAccess
                     userAnswersRepository = new UserAnswerRepository(context);
 
                 return userAnswersRepository;
+            }
+        }
+
+        public IUsersCoursesRepository UsersCourses
+        {
+            get
+            {
+                if (usersCoursesRepository == null)
+                    usersCoursesRepository = new UsersCoursesRepository(context);
+
+                return usersCoursesRepository;
             }
         }
 

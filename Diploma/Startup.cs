@@ -12,10 +12,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using DataAccess.Authentification;
 using System;
-using DiplomaServices.Services.Interfaces;
 using DiplomaServices.Mapping;
 using DataAccess.Interfaces.Repositories;
 using DiplomaServices.Services.AccountManagment;
+using DiplomaServices.Interfaces;
+using DiplomaServices.Services.TestServices;
+using DiplomaServices.Services;
 
 namespace Diploma
 {
@@ -46,8 +48,10 @@ namespace Diploma
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IJWTManagmentService, JWTManagmentService>();
-            services.AddTransient<IEmailVerificator, EmailVerificator>();
+            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ITestService, TestService>();
+            services.AddTransient<ICourseService, CourseService>();
 
 
             services.AddMvc().AddFluentValidation();

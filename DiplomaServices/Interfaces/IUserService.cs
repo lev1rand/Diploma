@@ -8,5 +8,6 @@ namespace DiplomaServices.Interfaces
         public int CreateUser(CreateAccountModel model);
         public CreateAccountModel GetUserById(int id);
         public IEnumerable<CreateAccountModel> GetAll();
+        public CheckIfUserExistsResponseModel CheckIfUserExists(string login);
     }
 }

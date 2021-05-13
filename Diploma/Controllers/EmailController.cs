@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using DiplomaServices.Services.Interfaces;
+using DiplomaServices.Interfaces;
 
 namespace DiplomaAPI.Controllers
 {
@@ -10,11 +10,11 @@ namespace DiplomaAPI.Controllers
     {
         #region
 
-        private readonly IEmailVerificator emailService;
+        private readonly IEmailService emailService;
 
         #endregion
 
-        public EmailController(IEmailVerificator emailService)
+        public EmailController(IEmailService emailService)
         {
             this.emailService = emailService;
         }

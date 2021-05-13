@@ -23,6 +23,9 @@ namespace DiplomaServices.Mapping
                 .ForMember(u => u.Role, cam => cam.MapFrom(src => src.Role))
                 .ReverseMap();
 
+            CreateMap<CreateCourseModel, Course>()
+                .ReverseMap();
+
 
         }
     }

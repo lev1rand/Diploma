@@ -11,6 +11,7 @@ namespace DataAccess
         IResponseOptionRepository ResponseOptions { get; }
         IRightSimpleAnswerRepository RightSimpleAnswers { get; }
         IUserAnswerRepository UserAnswers { get; }
+        IUsersCoursesRepository UsersCourses { get; }
         void Save();
     }
 }

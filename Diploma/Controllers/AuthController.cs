@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
 using DiplomaServices.Models;
-using DiplomaServices.Services.Interfaces;
+using DiplomaServices.Interfaces;
 
 namespace DiplomaAPI.Controllers
 {

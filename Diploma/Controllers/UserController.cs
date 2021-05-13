@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using DiplomaServices.Services.Interfaces;
 using DiplomaAPI.Filters;
+using DiplomaServices.Interfaces;
 
 namespace DiplomaAPI.Controllers
 {

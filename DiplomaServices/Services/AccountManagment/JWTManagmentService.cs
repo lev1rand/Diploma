@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DiplomaServices.Models;
-using DiplomaServices.Services.Interfaces;
+using DiplomaServices.Interfaces;
 
 namespace DiplomaServices.Services.AccountManagment
 {

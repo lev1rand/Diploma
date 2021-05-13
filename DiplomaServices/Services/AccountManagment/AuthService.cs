@@ -1,7 +1,8 @@
 ﻿using DataAccess;
 using System;
 using DiplomaServices.Models;
-using DiplomaServices.Services.Interfaces;
+using DiplomaServices.Interfaces;
+using DiplomaServices.Mapping;
 
 namespace DiplomaServices.Services.AccountManagment
 {

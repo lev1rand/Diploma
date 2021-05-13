@@ -1,8 +1,8 @@
 ﻿namespace DiplomaServices.Interfaces
 {
-    public interface IEmailVerificator
+    public interface IEmailService
     {
-        public void SendVerificationMessage(string emailToVerify);
+        public void SendMessage(string applicantEmail, string message, string confirmationLink);
         public string GenerateConfirmationToken();
         public void SetEmailAsVerified(int userId);
         public void SetConfirmationLink(string confirmationLink);

@@ -1,11 +1,12 @@
 ﻿using DataAccess;
+using DiplomaServices.Interfaces;
 using System;
 using System.Net;
 using System.Net.Mail;
 
 namespace DiplomaServices.Services.AccountManagment
 {
-    public class EmailVerificator : IEmailVerificator
+    public class EmailService : IEmailService
     {
         #region private fields
 
@@ -19,12 +20,12 @@ namespace DiplomaServices.Services.AccountManagment
 
         #endregion
 
-    public EmailVerificator(IUnitOfWork uow)
+        public EmailService(IUnitOfWork uow)
         {
             this.uow = uow;
         }
 
-        public void SendVerificationMessage(string emailToVerify)
+        public void SendMessage(string applicantEmail, string message, string confirmationLink)
         {
             SmtpClient smtp = new SmtpClient();
             smtp.Port = 587;
@@ -34,9 +35,22 @@ namespace DiplomaServices.Services.AccountManagment
             smtp.Credentials = new NetworkCredential(SENDER_EMAIL, SENDER_PASSWORD);
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-            var message = CreateMessage(emailToVerify, confirmationLink);
+            if (message == null)
+            {
+                var messageContent = CreateMessage(applicantEmail, null, confirmationLink);
+                smtp.Send(messageContent);
 
-            smtp.Send(message);
+                return;
+            }
+            else
+            {
+                var messageContent = CreateMessage(applicantEmail, message, null);
+                smtp.Send(messageContent);
+
+                return;
+            }
+
+
         }
         public void SetConfirmationLink(string confirmationLink)
         {
@@ -44,7 +58,7 @@ namespace DiplomaServices.Services.AccountManagment
         }
         public void SetEmailAsVerified(int userId)
         {
-            var user = uow.Users.Get(u=>u.Id == userId);
+            var user = uow.Users.Get(u => u.Id == userId);
             user.IsEmailVerified = true;
             uow.Users.Update(user);
 
@@ -54,18 +68,32 @@ namespace DiplomaServices.Services.AccountManagment
         {
             return Guid.NewGuid().ToString().Replace("-", string.Empty);
         }
-        private MailMessage CreateMessage(string emailToVerify, string confirmationLink)
+
+        private MailMessage CreateMessage(string applicantEmail, string messageText, string confirmationLink)
         {
             MailMessage message = new MailMessage();
 
             message.From = new MailAddress(SENDER_EMAIL);
-            message.To.Add(new MailAddress(emailToVerify));
-            message.Subject = "Hello there! Confirm your email, please! ";
+            message.To.Add(new MailAddress(applicantEmail));
+            message.Subject = "You have one more message from TestOn portal! ";
             message.IsBodyHtml = true; //to make message body as html  
-            message.Body = string.Format("Please, tab on this link {0} to verify your email and then go back to the website. " +
-                "Don't share this link with third parties! Have a good day :)", confirmationLink);
+
+            if (messageText == null && confirmationLink != null)
+            {
+                message.Body = GetConfirmationMessageText(confirmationLink);
+            }
+            else
+            {
+                message.Body = messageText;
+            }
 
             return message;
         }
+        private string GetConfirmationMessageText(string confirmationLink)
+        {
+            return string.Format("Hello! Please, tab on this link {0} to verify your email and then go back to the website. " +
+                "Don't share this link with third parties! Have a good day :)", confirmationLink);
+        }
     }
 }
+

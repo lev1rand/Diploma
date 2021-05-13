@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using DiplomaServices.Models;
-using DiplomaServices.Services;
-using DiplomaServices.Services.Interfaces;
+using DiplomaServices.Interfaces;
+using DiplomaServices.Mapping;
 
 namespace DiplomaAPI.Controllers
 {
@@ -14,13 +14,13 @@ namespace DiplomaAPI.Controllers
 
         private readonly IAccountService accountService;
 
-        private readonly IEmailVerificator emailService;
+        private readonly IEmailService emailService;
 
         private readonly MapperService mapper;
 
         #endregion
 
-        public AccountController(IAccountService accountService, IEmailVerificator emailService)
+        public AccountController(IAccountService accountService, IEmailService emailService)
         {
             this.accountService = accountService;
             this.emailService = emailService;
@@ -44,8 +44,8 @@ namespace DiplomaAPI.Controllers
                     },
                     Request.Scheme);
 
-                emailService.SetConfirmationLink(confirmationLink);
-                emailService.SendVerificationMessage(added.Login);
+                //emailService.SetConfirmationLink(confirmationLink);
+                emailService.SendMessage(added.Login, null, confirmationLink);
 
                 return Ok();
             }

@@ -3,11 +3,13 @@ using DataAccess.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using DiplomaServices.Models;
-using DiplomaServices.Services.Interfaces;
+using DiplomaServices.Interfaces;
+using DiplomaServices.Mapping;
+using System;
 
 namespace DiplomaServices.Services.AccountManagment
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         #region private members
 
@@ -48,6 +50,32 @@ namespace DiplomaServices.Services.AccountManagment
             return mapper.Map<IQueryable<User>, IEnumerable<CreateAccountModel>>(uow.Users.GetAll()).ToList();
         }
 
+        public CheckIfUserExistsResponseModel CheckIfUserExists(string login)
+        {
+            var user = uow.Users.Get(u => u.Login == login);
+            var response = new CheckIfUserExistsResponseModel();
+            response.Login = login;
+
+            if (user == null)
+            {
+                response.ErrorMessage = "User was not found!";
+                response.IsFound = false;
+
+                return response;
+            }
+
+            if (!user.IsEmailVerified)
+            {
+                response.ErrorMessage = "User email is not verified!";
+                response.IsFound = false;
+
+                return response;
+            }
+
+            response.IsFound = true;
+
+            return response;
+        }
         /*public IEnumerable<UserModel> GetWithPagination()
         {
             return mapper.Map<IQueryable<User>, IEnumerable<UserModel>>(uow.Users.GetAll()).ToList();
