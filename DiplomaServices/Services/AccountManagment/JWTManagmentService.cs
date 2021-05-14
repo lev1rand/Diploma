@@ -34,7 +34,7 @@ namespace DiplomaServices.Services.AccountManagment
 
             var encodedJwt = GenerateAccessToken();
 
-            var user = uow.Users.GetByPredicate(u => u.Login == identity.Name)[0];
+            var user = uow.Users.Get(u => u.Login == identity.Name);
 
             AuthResponseModel response = new AuthResponseModel
             {
@@ -42,7 +42,8 @@ namespace DiplomaServices.Services.AccountManagment
                 RefreshToken = GenerateRefreshToken(),
                 UserLogin = user.Login,
                 UserName = user.Name,
-                UserId = user.Id.ToString()
+                UserId = user.Id.ToString(),
+                IsEmailVerified = user.IsEmailVerified
             };
 
             user.AccessToken = response.AccessToken;

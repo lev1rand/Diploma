@@ -29,28 +29,28 @@ namespace DiplomaServices.Services.AccountManagment
         }
         public AuthResponseModel SignIn(SignInModel model)
         {
-            var user = uow.Users.GetByPredicate(u => u.Login == model.Login);
+            var user = uow.Users.Get(u => u.Login == model.Login);
             if (user == null)
             {
                 throw new Exception("User was not found!");
             }
             else
             {
-                if (!user[0].IsEmailVerified)
+                if (!user.IsEmailVerified)
                 {
                     throw new Exception("User email is not verified!");
                 }
                 else
                 {
-                    var hashedTrial = passwordHasher.GetEncodedInfoWithSaltExisting(model.Password, user[0].Salt);
+                    var hashedTrial = passwordHasher.GetEncodedInfoWithSaltExisting(model.Password, user.Salt);
 
-                    if (hashedTrial != user[0].Password)
+                    if (hashedTrial != user.Password)
                     {
                         throw new Exception("Password isn't valid! Please, check your input!");
                     }
                     else
                     {
-                        model.Password = user[0].Password;
+                        model.Password = user.Password;
 
                         return jwtService.CreateToken(mapper.Map<SignInModel, CreateTokenModel>(model));
                     }

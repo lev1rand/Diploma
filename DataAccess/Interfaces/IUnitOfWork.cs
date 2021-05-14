@@ -12,6 +12,7 @@ namespace DataAccess
         IRightSimpleAnswerRepository RightSimpleAnswers { get; }
         IUserAnswerRepository UserAnswers { get; }
         IUsersCoursesRepository UsersCourses { get; }
+        IUsersTestsRepository UsersTests { get; }
         void Save();
     }
 }

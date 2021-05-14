@@ -1,7 +1,7 @@
 ﻿using DataAccess.Entities;
 using DataAccess.Entities.Answers;
 using DataAccess.Entities.ManyToManyEntities;
-using DataAccess.Entities.Test;
+using DataAccess.Entities.TestEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess
@@ -18,6 +18,7 @@ namespace DataAccess
         public DbSet<ResponseOption> ResponseOptions { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<UsersCourses> UsersCourses { get; set; }
+        public DbSet<UsersTests> UsersTests { get; set; }
 
         #endregion
 
@@ -29,6 +30,9 @@ namespace DataAccess
         {
             modelBuilder.Entity<UsersCourses>()
             .HasKey(uc => new { uc.CourseId, uc.UserId });
+
+            modelBuilder.Entity<UsersTests>()
+            .HasKey(ut => new { ut.TestId, ut.UserId });
 
             modelBuilder.Entity<Course>()
             .HasIndex(c => c.Name)

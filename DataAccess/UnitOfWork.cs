@@ -18,6 +18,7 @@ namespace DataAccess
         private IRightSimpleAnswerRepository rightSimpleAnswerRepository;
         private IResponseOptionRepository responseOptionRepository;
         private IUsersCoursesRepository usersCoursesRepository;
+        private IUsersTestsRepository usersTestsRepository;
 
         private bool isDisposed;
 
@@ -108,6 +109,17 @@ namespace DataAccess
                     usersCoursesRepository = new UsersCoursesRepository(context);
 
                 return usersCoursesRepository;
+            }
+        }
+
+        public IUsersTestsRepository UsersTests
+        {
+            get
+            {
+                if (usersTestsRepository == null)
+                    usersTestsRepository = new UsersTestsRepository(context);
+
+                return usersTestsRepository;
             }
         }
 

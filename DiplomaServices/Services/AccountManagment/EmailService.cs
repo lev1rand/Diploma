@@ -59,10 +59,17 @@ namespace DiplomaServices.Services.AccountManagment
         public void SetEmailAsVerified(int userId)
         {
             var user = uow.Users.Get(u => u.Id == userId);
-            user.IsEmailVerified = true;
-            uow.Users.Update(user);
+            if (user != null)
+            {
+                user.IsEmailVerified = true;
 
-            uow.Save();
+                uow.Users.Update(user);
+                uow.Save();
+            }
+            else
+            {
+                throw new Exception("user wasn't found!");
+            }
         }
         public string GenerateConfirmationToken()
         {

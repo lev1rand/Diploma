@@ -12,6 +12,6 @@ namespace DiplomaServices.Models
         public List<CreateResponseOptionModel> ResponseOptions { get; set; }
         public bool IsOpenQuestion { get; set; }
         public bool IsFileQuestion { get; set; }
-
+        public int TestId { get; set; }
     }
 }

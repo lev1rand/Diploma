@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DiplomaServices.Models
 {
@@ -13,7 +14,7 @@ namespace DiplomaServices.Models
         public int? CourseId { get; set; }
         public List<CreateQuestionModel> Questions { get; set; }
         public List<CreateApplicantModel> Applicants { get; set; }
-        public string DateTime { get; set; }
+        public DateTime DateTime { get; set; }
         public string ExpireTime { get; set; }
     }
 }

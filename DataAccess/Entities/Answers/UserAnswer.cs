@@ -1,5 +1,4 @@
-﻿using DataAccess.Entities.Test;
-using System.ComponentModel;
+﻿using DataAccess.Entities.TestEntities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,8 +14,10 @@ namespace DataAccess.Entities.Answers
         public string Value { get; set; }
 
         [Required]
-        [DefaultValue(false)]
         public bool IsFile { get; set; }
+
+        [Required]
+        public bool IsOpen { get; set; }
 
         [Required]
         public int UserId { get; set; }

@@ -5,7 +5,6 @@ using DiplomaServices.Interfaces;
 namespace DiplomaAPI.Controllers
 {
     [Route("api/email")]
-    [ApiController]
     public class EmailController : ControllerBase
     {
         #region
@@ -28,7 +27,7 @@ namespace DiplomaAPI.Controllers
             {
                 emailService.SetEmailAsVerified(Convert.ToInt32(userId));
 
-                return Ok();
+                return Ok("Your email was successfuly verified!");
             }
             catch (Exception e)
             {

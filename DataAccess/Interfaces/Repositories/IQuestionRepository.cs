@@ -1,4 +1,4 @@
-﻿using DataAccess.Entities.Test;
+﻿using DataAccess.Entities.TestEntities;
 
 namespace DataAccess.Interfaces.Repositories
 {

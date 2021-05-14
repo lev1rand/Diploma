@@ -1,9 +1,11 @@
 ﻿using DataAccess;
-using DataAccess.Entities.Test;
+using DataAccess.Entities.ManyToManyEntities;
+using DataAccess.Entities.TestEntities;
 using DiplomaServices.Interfaces;
 using DiplomaServices.Mapping;
 using DiplomaServices.Models;
 using System;
+using System.Collections.Generic;
 
 namespace DiplomaServices.Services.TestServices
 {
@@ -15,7 +17,7 @@ namespace DiplomaServices.Services.TestServices
 
         private readonly ICourseService courseService;
 
-        //private readonly IQuestionsService questionsService;
+        private readonly IQuestionService questionsService;
 
         private readonly IEmailService emailService;
 
@@ -27,13 +29,13 @@ namespace DiplomaServices.Services.TestServices
 
         public TestService(IUnitOfWork uow, 
             ICourseService courseService,
-            //IQuestionsService questionsService,
+            IQuestionService questionsService,
             IEmailService emailService,
             IUserService userService)
         {
             this.uow = uow;
             this.courseService = courseService;
-           // this.questionsService = questionsService;
+            this.questionsService = questionsService;
             this.emailService = emailService;
             this.userService = userService;
 
@@ -53,24 +55,30 @@ namespace DiplomaServices.Services.TestServices
                 throw new Exception(string.Format("Course with id {0} doesn't exist!", model.CourseId));
             }
 
+            test.ComplitionDate = model.DateTime;
+            uow.Tests.Create(test);
+            uow.Save();
+
             //Create Questions
             if (model.Questions.Count > 0)
             {
                 foreach (var question in model.Questions)
                 {
-                   // questionsService.CreateQuestion(question);
+                   question.TestId = test.Id;
+
+                   questionsService.CreateQuestion(question);
                 }
             }
-           // else
-           // {
-           //     throw new Exception("Test doesn't contain questions!");
-           // }
+            else
+            {
+                throw new Exception("Test doesn't contain questions!");
+            }
 
             //Add Applicants
-            //if (model.Applicants.Count > 0)
-            //{
-                //AddApplicants(model.Applicants);
-           // }
+            if (model.Applicants.Count > 0)
+            {
+                AddApplicants(model.Applicants, test.Id);
+            }
 
             //Notify Applicants about Test
             if (model.Applicants.Count > 0)
@@ -86,17 +94,28 @@ namespace DiplomaServices.Services.TestServices
 
                         emailService.SendMessage(applicant.Login, messageText, null);
                     }
-                   
                 }
-                
             }
 
             return null;
         }
 
-        private void AddApplicants()
+        private void AddApplicants(List<CreateApplicantModel> applicants, int testId)
         {
+            foreach (var applicant in applicants)
+            {
+                var isExistResponse = userService.CheckIfUserExists(applicant.Login);
 
+                if (isExistResponse.IsFound)
+                {
+                    var user = uow.Users.Get(u => u.Login == applicant.Login);
+
+                    uow.UsersTests.Create(new UsersTests { UserId = user.Id, TestId = testId });
+
+                    uow.Save();
+                }
+
+            }
         }
 
         /*public IEnumerable<UserModel> GetWithPagination()
