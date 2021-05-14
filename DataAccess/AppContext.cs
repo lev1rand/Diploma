@@ -33,48 +33,6 @@ namespace DataAccess
 
             modelBuilder.Entity<UsersTests>()
             .HasKey(ut => new { ut.TestId, ut.UserId });
-
-            modelBuilder.Entity<Course>()
-            .HasIndex(c => c.Name)
-            .IsUnique();
-
-            /*modelBuilder.Entity<User>(entity =>
-            {
-                entity
-                .ToTable("User")
-                .HasKey(k => k.Id);
-
-                entity
-                .Property(i => i.Id).HasColumnName("Id")
-                .IsRequired()
-                .ValueGeneratedOnAdd();
-
-                entity
-                .Property(p => p.Name).HasColumnName("Name")
-                .IsRequired();
-
-                entity
-                .Property(p => p.Login).HasColumnName("Login")
-                .IsRequired();
-
-                entity
-                .Property(p => p.Password)
-                .HasColumnName("PasswordHash")
-                .IsRequired();
-
-                entity
-               .Property(p => p.IsEmailVerified)
-               .HasColumnName("IsEmailVerified")
-               .IsRequired();
-
-                entity
-               .Property(p => p.Salt)
-               .HasColumnName("HashingSalt")
-               .IsRequired();
-
-            });
-
-            base.OnModelCreating(modelBuilder);*/
         }
     }
 }

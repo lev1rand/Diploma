@@ -46,6 +46,10 @@ namespace DiplomaServices.Services
             return response;
         }
 
+        public IEnumerable<Course> GetAll()
+        {
+            return uow.Courses.GetAll();
+        }
         private AddCourseApplicantsResponseModel AddApplicants(List<CreateApplicantModel> applicants, int courseId)
         {
             var applicantsToAdd = new List<CreateApplicantModel>();

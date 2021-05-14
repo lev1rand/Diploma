@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Entities;
+using DataAccess.Entities.Answers;
 using DataAccess.Entities.TestEntities;
 using DiplomaServices.Models;
 
@@ -31,6 +32,9 @@ namespace DiplomaServices.Mapping
                 .ReverseMap();
 
             CreateMap<CreateResponseOptionModel, ResponseOption>()
+                .ReverseMap();
+
+            CreateMap<CreateRightAnswerModel, RightSimpleAnswer>()
                 .ReverseMap();
         }
     }

@@ -21,6 +21,7 @@ namespace DiplomaServices.Services.TestServices
         public QuestionService(IUnitOfWork uow)
         {
             this.uow = uow;
+            mapper = new MapperService();
         }
 
         public void CreateQuestion(CreateQuestionModel model)

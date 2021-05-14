@@ -37,5 +37,18 @@ namespace DiplomaAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        public IActionResult GetCourses()
+        {
+            try
+            {
+                return Ok(courseService.GetAll());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

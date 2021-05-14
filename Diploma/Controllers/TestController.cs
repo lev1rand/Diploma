@@ -24,13 +24,26 @@ namespace DiplomaAPI.Controllers
         {
             this.testService = testService;
         }
-        // GET: api/users
-        [HttpGet]
+
+        [HttpPost]
         public IActionResult CreateTest(CreateTestModel model)
         {
             try
             {
                 return Ok(testService.CreateTest(model));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetTests()
+        {
+            try
+            {
+                return Ok(testService.GetAll());
             }
             catch (Exception e)
             {

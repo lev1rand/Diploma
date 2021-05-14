@@ -56,6 +56,7 @@ namespace DiplomaServices.Services.TestServices
             }
 
             test.ComplitionDate = model.DateTime;
+            test.Theme = model.Theme;
             uow.Tests.Create(test);
             uow.Save();
 
@@ -99,7 +100,10 @@ namespace DiplomaServices.Services.TestServices
 
             return null;
         }
-
+        public IEnumerable<Test> GetAll()
+        {
+            return uow.Tests.GetAll();
+        }
         private void AddApplicants(List<CreateApplicantModel> applicants, int testId)
         {
             foreach (var applicant in applicants)
