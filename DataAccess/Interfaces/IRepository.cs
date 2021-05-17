@@ -7,11 +7,12 @@ namespace DataAccess.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        IQueryable<T> GetAll();
+        public IQueryable<T> GetAll();
         public T Get(Expression<Func<T, bool>> predicate = null);
-        List<T> GetByPredicate(Expression<Func<T, bool>> predicate = null);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int id);
+        public List<T> GetByPredicate(Expression<Func<T, bool>> predicate = null);
+        public List<T> GetPaginated(int pageNumber, int pageSize);
+        public void Create(T item);
+        public void Update(T item);
+        public void Delete(int id);
     }
 }

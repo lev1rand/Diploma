@@ -1,11 +1,11 @@
 ﻿using DataAccess;
 using DataAccess.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using DiplomaServices.Models;
 using DiplomaServices.Interfaces;
 using DiplomaServices.Mapping;
-using System;
+using DiplomaServices.Models;
+using DiplomaServices.Pagination;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DiplomaServices.Services.AccountManagment
 {
@@ -76,10 +76,20 @@ namespace DiplomaServices.Services.AccountManagment
 
             return response;
         }
-        /*public IEnumerable<UserModel> GetWithPagination()
+
+        public PagedResponse<List<UserModel>> GetUsersPaginated(PaginationFilter filter)
         {
-            return mapper.Map<IQueryable<User>, IEnumerable<UserModel>>(uow.Users.GetAll()).ToList();
-        }*/
+            var totalCount = uow.Users.GetAll().Count();
+
+            var pagedDataFromDb = uow.Users.GetPaginated(filter.PageNumber, filter.PageSize);
+            var pagedDataForResponse = new List<UserModel>();
+            foreach (var user in pagedDataFromDb)
+            {
+                pagedDataForResponse.Add(mapper.Map<User, UserModel>(user));
+            }
+
+            return new PagedResponse<List<UserModel>>(pagedDataForResponse, filter.PageNumber, filter.PageSize, totalCount);
+        }
     }
 }
 

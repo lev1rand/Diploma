@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DiplomaServices.Models;
+using DiplomaServices.Pagination;
 
 namespace DiplomaServices.Interfaces
 {
@@ -9,5 +10,6 @@ namespace DiplomaServices.Interfaces
         public CreateAccountModel GetUserById(int id);
         public IEnumerable<CreateAccountModel> GetAll();
         public CheckIfUserExistsResponseModel CheckIfUserExists(string login);
+        public PagedResponse<List<UserModel>> GetUsersPaginated(PaginationFilter filter);
     }
 }

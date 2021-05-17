@@ -36,6 +36,9 @@ namespace DiplomaServices.Mapping
 
             CreateMap<CreateRightAnswerModel, RightSimpleAnswer>()
                 .ReverseMap();
+
+            CreateMap<UserModel, User>()
+               .ReverseMap();
         }
     }
 }

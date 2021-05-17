@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace DataAccess.Repositories
 {
-    public class CommonRepository<T>: IRepository<T> where T : class
+    public class CommonRepository<T> : IRepository<T> where T : class
     {
         #region 
 
@@ -55,6 +55,15 @@ namespace DataAccess.Repositories
 
             return query.ToList();
         }
+
+        public List<T> GetPaginated(int pageNumber, int pageSize)
+        {
+            return context.Set<T>()
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+
         public void Delete(int id)
         {
             T deleted = context.Set<T>().Find(id);

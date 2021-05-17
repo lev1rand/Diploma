@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using DiplomaAPI.Filters;
 using DiplomaServices.Interfaces;
+using DiplomaServices.Pagination;
 
 namespace DiplomaAPI.Controllers
 {
@@ -36,5 +37,22 @@ namespace DiplomaAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("paginated")]
+        public IActionResult GetUsersPaginated([FromQuery] PaginationFilter filter)
+        {
+            try
+            {
+                var response = userService.GetUsersPaginated(filter);
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }
