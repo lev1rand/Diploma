@@ -32,4 +32,8 @@
     <ProjectReference Include="..\DiplomaServices\DiplomaServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FiledAnswers\" />
+  </ItemGroup>
+
 </Project>

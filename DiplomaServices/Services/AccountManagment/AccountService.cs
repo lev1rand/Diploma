@@ -22,7 +22,7 @@ namespace DiplomaServices.Services.AccountManagment
         }
         public int CreateAccount(CreateAccountModel account)
         {
-                if (uow.Users.GetByPredicate(u => u.Login == account.Login).Count > 0)
+                if (uow.Users.GetSeveral(u => u.Login == account.Login).Count > 0)
                 {
                     throw new Exception(string.Format("User with login {0} already exists!", account.Login));
                 }

@@ -13,6 +13,7 @@ namespace DataAccess
         IUserAnswerRepository UserAnswers { get; }
         IUsersCoursesRepository UsersCourses { get; }
         IUsersTestsRepository UsersTests { get; }
+        ITestResultRepository TestResults { get; }
         void Save();
     }
 }

@@ -19,6 +19,7 @@ namespace DataAccess
         public DbSet<Test> Tests { get; set; }
         public DbSet<UsersCourses> UsersCourses { get; set; }
         public DbSet<UsersTests> UsersTests { get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
 
         #endregion
 

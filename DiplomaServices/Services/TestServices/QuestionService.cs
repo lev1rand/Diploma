@@ -43,12 +43,12 @@ namespace DiplomaServices.Services.TestServices
 
         public List<GetQuestionModel> GetQuestionsForTheTest(int testId)
         {
-            var questions = uow.Questions.GetByPredicate(q => q.TestId == testId);
+            var questions = uow.Questions.GetSeveral(q => q.TestId == testId);
             var responseQuestionModels = new List<GetQuestionModel>();
 
             foreach (var question in questions)
             {
-                var responseOptionsByQuestion = uow.ResponseOptions.GetByPredicate(rp => rp.QuestionId == question.Id);
+                var responseOptionsByQuestion = uow.ResponseOptions.GetSeveral(rp => rp.QuestionId == question.Id);
                 var getResponseOptions = new List<GetResponseOptionModel>();
 
                 foreach (var item in responseOptionsByQuestion)

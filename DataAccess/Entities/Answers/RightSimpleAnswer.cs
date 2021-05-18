@@ -13,7 +13,7 @@ namespace DataAccess.Entities.Answers
         public int Id { get; set; }
 
         [Required]
-        public float Grade { get; set; }
+        public decimal Grade { get; set; }
 
         [Required]
         public int ResponseOptionId { get; set; }

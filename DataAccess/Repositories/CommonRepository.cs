@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,19 +33,24 @@ namespace DataAccess.Repositories
             context.Set<T>().Update(item);
         }
 
-        public T Get(Expression<Func<T, bool>> predicate = null)
+        public T Get(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = context.Set<T>();
 
             if (predicate != null)
             {
                 query = query.Where(predicate);
+            }
+
+            if (include != null)
+            {
+                query = include(query);
             }
 
             return query.FirstOrDefault();
         }
 
-        public List<T> GetByPredicate(Expression<Func<T, bool>> predicate = null)
+        public List<T> GetSeveral(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = context.Set<T>();
 
@@ -53,15 +59,26 @@ namespace DataAccess.Repositories
                 query = query.Where(predicate);
             }
 
+            if (include != null)
+            {
+                query = include(query);
+            }
+
             return query.ToList();
         }
 
-        public List<T> GetPaginated(int pageNumber, int pageSize)
+        public List<T> GetPaginated(int pageNumber, int pageSize, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return context.Set<T>()
+            var query = context.Set<T>()
                 .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+                .Take(pageSize);
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return query.ToList();
         }
 
         public void Delete(int id)

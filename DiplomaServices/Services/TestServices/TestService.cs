@@ -23,21 +23,25 @@ namespace DiplomaServices.Services.TestServices
 
         private readonly IUserService userService;
 
+        private readonly IAnswersService answersService;
+
         private readonly MapperService mapper;
 
         #endregion
 
-        public TestService(IUnitOfWork uow, 
+        public TestService(IUnitOfWork uow,
             ICourseService courseService,
             IQuestionService questionsService,
             IEmailService emailService,
-            IUserService userService)
+            IUserService userService,
+            IAnswersService answersService)
         {
             this.uow = uow;
             this.courseService = courseService;
             this.questionsService = questionsService;
             this.emailService = emailService;
             this.userService = userService;
+            this.answersService = answersService;
 
             mapper = new MapperService();
         }
@@ -65,9 +69,9 @@ namespace DiplomaServices.Services.TestServices
             {
                 foreach (var question in model.Questions)
                 {
-                   question.TestId = test.Id;
+                    question.TestId = test.Id;
 
-                   questionsService.CreateQuestion(question);
+                    questionsService.CreateQuestion(question);
                 }
             }
             else
@@ -104,6 +108,16 @@ namespace DiplomaServices.Services.TestServices
         {
             return uow.Tests.GetAll();
         }
+
+        public IEnumerable<GetTestDetailsModel> GetTestDetailsByStudentId(int userId)
+        {
+            return null;
+        }
+        public void ProcessAnswers(List<SaveUserAnswersModel> answers, int userId)
+        {
+            answersService.SaveAnswers(answers, userId);
+            answersService.EvaluateAnswers(answers, userId);
+        }
         private void AddApplicants(List<CreateApplicantModel> applicants, int testId)
         {
             foreach (var applicant in applicants)
@@ -121,10 +135,5 @@ namespace DiplomaServices.Services.TestServices
 
             }
         }
-
-        /*public IEnumerable<UserModel> GetWithPagination()
-        {
-            return mapper.Map<IQueryable<User>, IEnumerable<UserModel>>(uow.Users.GetAll()).ToList();
-        }*/
     }
 }

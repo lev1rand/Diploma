@@ -43,7 +43,8 @@ namespace DiplomaServices.Services.AccountManagment
                 UserLogin = user.Login,
                 UserName = user.Name,
                 UserId = user.Id.ToString(),
-                IsEmailVerified = user.IsEmailVerified
+                IsEmailVerified = user.IsEmailVerified,
+                Role = user.Role
             };
 
             user.AccessToken = response.AccessToken;
@@ -68,7 +69,7 @@ namespace DiplomaServices.Services.AccountManagment
 
         private ClaimsIdentity GetIdentity(string userName, string password)
         {
-            var users = uow.Users.GetByPredicate(x => x.Login == userName && x.Password == password);
+            var users = uow.Users.GetSeveral(x => x.Login == userName && x.Password == password);
             if (users != null && users.Count < 2)
             {
                 var claims = new List<Claim>

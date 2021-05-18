@@ -57,10 +57,13 @@ namespace Diploma
             services.AddTransient<ITestService, TestService>();
             services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<IQuestionService, QuestionService>();
+            services.AddTransient<IAnswersService, AnswersService>();
 
-            services.AddMvc().AddFluentValidation();
+            services.AddMvc()
+                    .AddFluentValidation();
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers()
+                    .AddNewtonsoftJson();
 
             var mapperConfig = new MapperConfiguration(mc =>
             {

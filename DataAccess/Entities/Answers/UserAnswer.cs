@@ -14,12 +14,6 @@ namespace DataAccess.Entities.Answers
         public string Value { get; set; }
 
         [Required]
-        public bool IsFile { get; set; }
-
-        [Required]
-        public bool IsOpen { get; set; }
-
-        [Required]
         public int UserId { get; set; }
         public User User { get; set; }
 
