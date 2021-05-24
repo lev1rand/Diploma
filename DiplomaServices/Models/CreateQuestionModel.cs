@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DiplomaServices.Models
 {
@@ -12,6 +13,8 @@ namespace DiplomaServices.Models
         public List<CreateResponseOptionModel> ResponseOptions { get; set; }
         public bool IsOpenQuestion { get; set; }
         public bool IsFileQuestion { get; set; }
+        public decimal Grade { get; set; }
+        [JsonIgnore]
         public int TestId { get; set; }
     }
 }

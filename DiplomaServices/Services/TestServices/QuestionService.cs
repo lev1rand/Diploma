@@ -78,18 +78,31 @@ namespace DiplomaServices.Services.TestServices
             {
                 foreach (var responseOption in model.ResponseOptions)
                 {
+                    decimal grade = 0;
+
+                    var numberOfValidAnswers = CountNumberOfValidAnswers(model);
+
+                    if (numberOfValidAnswers > 1)
+                    {
+                        grade = model.Grade/ numberOfValidAnswers;
+                    }
+                    else
+                    {
+                        grade = model.Grade;
+                    }
+
                     var responseOptionEntity = mapper.Map<CreateResponseOptionModel, ResponseOption>(responseOption);
                     responseOptionEntity.QuestionId = questionId;
 
                     uow.ResponseOptions.Create(responseOptionEntity);
                     uow.Save();
-
+                    
                     fullResponseOptions.Add(new CreateResponseOptionModelWithId
                     {
                         Id = responseOptionEntity.Id,
                         Value = responseOptionEntity.Value,
                         IsValid = responseOption.IsValid,
-                        Grade = responseOption.Grade
+                        Grade = grade
                     });
                 }
 
@@ -119,6 +132,21 @@ namespace DiplomaServices.Services.TestServices
                 uow.RightSimpleAnswers.Create(mapper.Map<CreateRightAnswerModel, RightSimpleAnswer>(rightAnswer));
                 uow.Save();
             }
+        }
+
+        private decimal CountNumberOfValidAnswers(CreateQuestionModel model)
+        {
+            var numberOfValidAnswers = 0;
+
+            foreach (var responseOption in model.ResponseOptions)
+            {
+                if (responseOption.IsValid)
+                {
+                    numberOfValidAnswers++;
+                }
+            }
+
+            return numberOfValidAnswers;
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class CreateRightAnswerModel
     {
-        public float Grade { get; set; }
+        public decimal Grade { get; set; }
         public int ResponseOptionId { get; set; }
     }
 }
