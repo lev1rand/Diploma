@@ -23,89 +23,62 @@ namespace DiplomaServices.Services.TestServices
         {
             this.uow = uow;
         }
-        public void SaveAnswers(List<SaveUserAnswersModel> answers, int userId)
+        public void SaveAnswers(SavePassedTestResultQuestionModel questionWithAnswers, int userId, int testId)
         {
-            foreach (var answer in answers)
-            {
-                var question = uow.Questions.Get(q => q.Id == answer.QuestionId);
+            var question = uow.Questions.Get(q => q.Id == questionWithAnswers.QuestionId);
 
-                if (question.IsFileQuestion)
-                {
-                    SaveFiledAnswer(new SaveUserAnswerDetailedModel
-                    {
-                        Answer = answer,
-                        Question = question,
-                        UserId = userId
-                    });
-                }
-                else
-                {
-                    SaveNonFiledAnswer(new SaveUserAnswerDetailedModel
-                    {
-                        Answer = answer,
-                        Question = question,
-                        UserId = userId
-                    });
-                }
+            if (question.IsFileQuestion)
+            {
+                SaveFiledAnswer(userId, question.Id, testId, questionWithAnswers.FileName, questionWithAnswers.OpenOrFileAnswerValue);
+            }
+            else if (question.IsOpenQuestion)
+            {
+                SaveOpenAnswer(userId, question.Id, questionWithAnswers.OpenOrFileAnswerValue);
+            }
+            else
+            {
+                SaveUsualAnswer(userId, question.Id, questionWithAnswers.ChosenResponseOptionIds);
             }
         }
 
-        public void EvaluateAnswers(List<SaveUserAnswersModel> answers, int userId)
+
+        public decimal EvaluateAnswersForQuestion(int questionId, int userId, List<int> chosenROIds)
         {
-            foreach (var answer in answers)
-            {
-                var answerByQuestionAndUser =
-                    uow.UserAnswers.Get(ua =>
-                    ua.QuestionId == answer.QuestionId &&
-                    ua.UserId == userId,
-                    include: ua => ua.Include(ua => ua.Question));
+            var grade = CountGradeForQuestion(questionId, chosenROIds);
 
-
-                var question = uow.Questions.Get(q => q.Id == answer.QuestionId);
-
-                if (!question.IsFileQuestion && !question.IsOpenQuestion)
-                {
-                    var grade = CountGradeForAnswer(answerByQuestionAndUser);
-
-                    var testResult = new TestResult
-                    {
-                        UserAnswerId = answerByQuestionAndUser.Id,
-                        SummaryGrade = grade
-                    };
-                }
-            }
+            return grade;
         }
 
-        private void SaveFiledAnswer(SaveUserAnswerDetailedModel answerModel)
+        private void SaveFiledAnswer(int userId, int questionId, int testId, string fileName, string value)
         {
-            var fileName = CreateFileName(answerModel.UserId, answerModel.Question.TestId, answerModel.Question.Id);
-            var fileExtension = Path.GetExtension(answerModel.Answer.FileName);
-            var filePath = string.Format(@"..\Diploma\FiledAnswers\{0}{1}", fileName, fileExtension);
+            var generatedFileName = CreateFileName(userId, testId, questionId);
+            var fileExtension = Path.GetExtension(fileName);
+            var filePath = string.Format(@"..\Diploma\FiledAnswers\{0}{1}", generatedFileName, fileExtension);
 
-            var spl = answerModel.Answer.Value.Split('/')[1];
+            var spl = value.Split('/')[1];
             var format = spl.Split(';')[0];
-            var validBase64String = answerModel.Answer.Value.Replace($"data:image/{format};base64,", string.Empty);
+            var validBase64String = value.Replace($"data:image/{format};base64,", string.Empty);
 
             File.Create(filePath).Close();
             File.WriteAllBytes(filePath, Convert.FromBase64String(validBase64String));
 
             uow.UserAnswers.Create(new UserAnswer
             {
-                QuestionId = answerModel.Question.Id,
-                UserId = answerModel.UserId,
+                QuestionId = questionId,
+                UserId = userId,
                 Value = filePath
             });
 
             uow.Save();
         }
 
-        private void SaveNonFiledAnswer(SaveUserAnswerDetailedModel answerModel)
+        private void SaveOpenAnswer(int userId, int questionId, string answerValue)
         {
             var answer = new UserAnswer
             {
-                UserId = answerModel.UserId,
-                QuestionId = answerModel.Question.Id,
-                Value = answerModel.Answer.Value
+                UserId = userId,
+                QuestionId = questionId,
+                Value = answerValue
             };
 
             uow.UserAnswers.Create(answer);
@@ -113,42 +86,62 @@ namespace DiplomaServices.Services.TestServices
             uow.Save();
         }
 
+        private void SaveUsualAnswer(int userId, int questionId, List<int> chosenROIds)
+        {
+            foreach (var roId in chosenROIds)
+            {
+                var responseOptionById = uow.ResponseOptions.Get(ro => ro.Id == roId);
+                if (responseOptionById != null)
+                {
+                    var userAnswer = new UserAnswer
+                    {
+                        QuestionId = questionId,
+                        ResponseOptionId = responseOptionById.Id,
+                        UserId = userId,
+                        Value = responseOptionById.Value
+                    };
+
+                    uow.UserAnswers.Create(userAnswer);
+                }
+            }
+        }
+
         private string CreateFileName(int userId, int testId, int questionId)
         {
             return string.Format("{0}_{1}_{2}", userId, testId, questionId);
         }
 
-        private decimal CountGradeForAnswer(UserAnswer answer)
+        private decimal CountGradeForQuestion(int questionId, List<int>chosenROIds)
         {
-            //Get ResponseOptions of specific Question
-            var responseOptions = uow.ResponseOptions.GetSeveral(ro =>
-            ro.QuestionId == answer.QuestionId,
-            include: ro => ro.Include(ro => ro.Question));
+            decimal grade = 0;
 
-            //Find whether value of Answer corresponds with Value of ResponseOption
-            var responseOption = responseOptions.Find(ro => ro.Value == answer.Value);
+            var question = uow.Questions.Get(q => q.Id == questionId);
 
-            //If not found - return 0 grade
-            if (responseOption == null)
+            if (!question.IsFileQuestion && !question.IsOpenQuestion)
             {
-                return 0;
-            }
-            else
-            {
-                //Else we try to find corresponding ResponseOption in RightSimpleAnswers
-                var rightSimpleAnswer = uow.RightSimpleAnswers.Get(rsa => rsa.ResponseOptionId == responseOption.Id);
-
-                //If not found - return 0 grade
-                if (rightSimpleAnswer == null)
+                if(chosenROIds.Count == 0)
                 {
-                    return 0;
+                    return grade;
                 }
                 else
                 {
-                    //Else get grade and return it
-                    return rightSimpleAnswer.Grade;
+                    foreach (var roId in chosenROIds)
+                    {
+                        var rightSimpleAnswer = uow.RightSimpleAnswers.Get(rsa => rsa.ResponseOptionId == roId);
+
+                        if (rightSimpleAnswer == null)
+                        {
+                            return grade;
+                        }
+                        else
+                        {
+                            grade += rightSimpleAnswer.Grade;
+                        }
+                    }
                 }
             }
+
+            return grade;
         }
     }
 }

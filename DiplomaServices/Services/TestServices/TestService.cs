@@ -113,10 +113,19 @@ namespace DiplomaServices.Services.TestServices
         {
             return null;
         }
-        public void ProcessAnswers(List<SaveUserAnswersModel> answers, int userId)
+        public IEnumerable<decimal> ProcessTestResultSaving(SavePassedTestResultsModel testResult, int userId)
         {
-            answersService.SaveAnswers(answers, userId);
-            answersService.EvaluateAnswers(answers, userId);
+            var gradesForTest = new List<decimal>();
+
+            foreach (var question in testResult.Questions)
+            {
+                answersService.SaveAnswers(question, userId, testResult.TestId);
+                var gradeForQuestion = answersService.EvaluateAnswersForQuestion(question.QuestionId, userId, question.ChosenResponseOptionIds);
+
+                gradesForTest.Add(gradeForQuestion);
+            }
+
+            return gradesForTest;
         }
         private void AddApplicants(List<CreateApplicantModel> applicants, int testId)
         {
@@ -137,3 +146,4 @@ namespace DiplomaServices.Services.TestServices
         }
     }
 }
+

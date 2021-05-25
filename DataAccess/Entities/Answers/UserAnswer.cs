@@ -20,5 +20,8 @@ namespace DataAccess.Entities.Answers
         [Required]
         public int QuestionId { get; set; }
         public Question Question { get; set; }
+
+        public int? ResponseOptionId { get; set; }
+        public ResponseOption ResponseOption { get; set; }
     }
 }

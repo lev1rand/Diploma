@@ -55,13 +55,13 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpPost]
-        [Route("answers-processing")]
-        public IActionResult SaveAnswers(List<SaveUserAnswersModel> answers)
+        [Route("test-results-savage")]
+        public IActionResult SaveStudentTestResults(SavePassedTestResultsModel testResult)
         {
             try
             {
                 var userId = Convert.ToInt32(new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userId"))));
-                testService.ProcessAnswers(answers, userId);
+                testService.ProcessTestResultSaving(testResult, userId);
 
                 return Ok();
             }

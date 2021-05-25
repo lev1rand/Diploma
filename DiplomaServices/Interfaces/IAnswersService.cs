@@ -5,7 +5,7 @@ namespace DiplomaServices.Interfaces
 {
     public interface IAnswersService
     {
-        public void SaveAnswers(List<SaveUserAnswersModel> answers, int userId);
-        public void EvaluateAnswers(List<SaveUserAnswersModel> answers, int userId);
+        public void SaveAnswers(SavePassedTestResultQuestionModel questionWithAnswers, int userId, int testId);
+        public decimal EvaluateAnswersForQuestion(int questionId, int userId, List<int> chosenROIds);
     }
 }
