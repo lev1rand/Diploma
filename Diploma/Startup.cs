@@ -33,7 +33,7 @@ namespace Diploma
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("Default Connection");
+            string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<DataAccess.AppContext>(options =>
                 options.UseSqlServer(connection));
