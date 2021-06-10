@@ -2,7 +2,6 @@
 using System;
 using DiplomaServices.Models;
 using DiplomaServices.Interfaces;
-using DiplomaServices.Mapping;
 
 namespace DiplomaAPI.Controllers
 {
@@ -16,16 +15,12 @@ namespace DiplomaAPI.Controllers
 
         private readonly IEmailService emailService;
 
-        private readonly MapperService mapper;
-
         #endregion
 
         public AccountController(IAccountService accountService, IEmailService emailService)
         {
             this.accountService = accountService;
             this.emailService = emailService;
-
-            mapper = new MapperService();
         }
         // POST: api/account
         [HttpPost]
@@ -47,7 +42,7 @@ namespace DiplomaAPI.Controllers
                 //emailService.SetConfirmationLink(confirmationLink);
                 emailService.SendMessage(added.Login, null, confirmationLink);
 
-                return Ok();
+                return Ok(response);
             }
             catch (Exception e)
             {

@@ -6,6 +6,6 @@ namespace DiplomaServices.Interfaces
     {
         public AuthResponseModel SignIn(SignInModel model);
         public void SignOut(SignOutModel model);
-        public string RefreshAccessToken();
+        public string RefreshAccessToken(RefreshModel refreshModel);
     }
 }

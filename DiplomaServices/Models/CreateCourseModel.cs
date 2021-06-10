@@ -2,7 +2,7 @@
 
 namespace DiplomaServices.Models
 {
-    public class CreateCourseModel
+    public class CreateCourseModel: AuthTemplateModel
     {
         public CreateCourseModel()
         {

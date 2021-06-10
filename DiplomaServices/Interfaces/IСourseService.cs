@@ -7,7 +7,7 @@ namespace DiplomaServices.Interfaces
     public interface ICourseService
     {
         public AddCourseApplicantsResponseModel CreateCourse(CreateCourseModel model);
-        public IEnumerable<Course> GetAll();
+        public IEnumerable<GetCourseSimpleModel> GetAll();
         public bool CheckIfCourseExists(int id);
     }
 }

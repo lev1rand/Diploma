@@ -46,9 +46,27 @@ namespace DiplomaServices.Services
             return response;
         }
 
-        public IEnumerable<Course> GetAll()
+        public IEnumerable<GetCourseSimpleModel> GetAll()
         {
-            return uow.Courses.GetAll();
+            var courseModels = new List<GetCourseSimpleModel>();
+
+            if (uow.Courses.GetAll() == null)
+            {
+                return courseModels;
+            }
+
+            foreach (var course in uow.Courses.GetAll())
+            {
+                courseModels.Add(new GetCourseSimpleModel
+                {
+                    Id = course.Id,
+                    Name = course.Name,
+                    Description = course.Description
+                });
+
+            }
+
+            return courseModels;
         }
         private AddCourseApplicantsResponseModel AddApplicants(List<CreateApplicantModel> applicants, int courseId)
         {

@@ -20,12 +20,14 @@ using DiplomaServices.Services.TestServices;
 using DiplomaServices.Services;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http;
 
 namespace Diploma
 {
     public class Startup
     {
-        private const int SESSION_EXPIRATION_TIME_IN_MINUTES = 60;
+        private const int SESSION_EXPIRATION_TIME_IN_MINUTES = 160000;
         public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
@@ -37,6 +39,8 @@ namespace Diploma
 
             services.AddDbContext<DataAccess.AppContext>(options =>
                 options.UseSqlServer(connection));
+
+
 
             services.AddTransient<IUnitOfWork, UnitOfWork>(e => new UnitOfWork(e.GetService<DataAccess.AppContext>()));
             services.AddTransient<IUserRepository, UserRepository>();
@@ -59,9 +63,12 @@ namespace Diploma
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswersService, AnswersService>();
 
+            services.AddCors();
             services.AddMvc()
                     .AddFluentValidation();
 
+
+            var corsBuilder = new CorsPolicyBuilder();
             services.AddControllers()
                     .AddNewtonsoftJson();
 
@@ -135,9 +142,6 @@ namespace Diploma
             });
         }
 
-
-
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -157,7 +161,15 @@ namespace Diploma
             });
             app.UseStatusCodePages();
             app.UseRouting();
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseSession();
+            app.Use(next => new RequestDelegate(
+          async context =>
+          {
+              context.Request.EnableBuffering();
+              await next(context);
+          }
+      ));
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -165,7 +177,7 @@ namespace Diploma
             {
                 endpoints.MapControllers();
             });
-            app.UseCors();
+
         }
     }
 }

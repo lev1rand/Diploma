@@ -1,8 +1,7 @@
 ﻿namespace DiplomaServices.Models
 {
-    public class SignOutModel
+    public class AuthTemplateModel
     {
-        public string RefreshToken { get; set; }
         public string SessionId { get; set; }
     }
 }

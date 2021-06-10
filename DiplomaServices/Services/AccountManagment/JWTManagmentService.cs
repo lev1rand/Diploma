@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DiplomaServices.Models;
 using DiplomaServices.Interfaces;
+using DataAccess.Entities;
 
 namespace DiplomaServices.Services.AccountManagment
 {
@@ -22,14 +23,13 @@ namespace DiplomaServices.Services.AccountManagment
         {
             this.uow = uow;
         }
-
         public AuthResponseModel CreateToken(CreateTokenModel createTokenModel)
         {
             var identity = GetIdentity(createTokenModel.Login, createTokenModel.Password);
 
             if (identity == null)
             {
-                throw new Exception("Invalid username or password.");
+                throw new Exception("Невірний логін або пароль!");
             }
 
             var encodedJwt = GenerateAccessToken();
@@ -42,23 +42,23 @@ namespace DiplomaServices.Services.AccountManagment
                 RefreshToken = GenerateRefreshToken(),
                 UserLogin = user.Login,
                 UserName = user.Name,
-                UserId = user.Id.ToString(),
+                UserId = user.Id,
                 IsEmailVerified = user.IsEmailVerified,
                 Role = user.Role
             };
 
-            user.AccessToken = response.AccessToken;
-            uow.Users.Update(user);
-            uow.Save();
-            
+            UpdateUserAccessToken(user, response.AccessToken);
+
             return response;
         }
-
-        public string RefreshAccessToken()
+        public string RefreshAccessToken(string login)
         {
-            return GenerateAccessToken();
-        }
+            var user = uow.Users.Get(u => u.Login == login);
+            var accessToken = GenerateAccessToken();
+            UpdateUserAccessToken(user, accessToken);
 
+            return accessToken;
+        }
         public void RemoveToken(RemoveTokenModel removeTokenModel)
         {
             var user = uow.Users.Get(u=>u.Id == removeTokenModel.UserId);
@@ -66,7 +66,12 @@ namespace DiplomaServices.Services.AccountManagment
             uow.Users.Update(user);
             uow.Save();
         }
-
+        private void UpdateUserAccessToken(User user, string accessToken)
+        {
+            user.AccessToken = accessToken;
+            uow.Users.Update(user);
+            uow.Save();
+        }
         private ClaimsIdentity GetIdentity(string userName, string password)
         {
             var users = uow.Users.GetSeveral(x => x.Login == userName && x.Password == password);
@@ -84,7 +89,7 @@ namespace DiplomaServices.Services.AccountManagment
             }
             else
             {
-                throw new KeyNotFoundException("User wasn't found!");
+                throw new KeyNotFoundException(string.Format("Користувач із логіном {0} не був знайдений!", userName));
             }
         }
         private string GenerateAccessToken()

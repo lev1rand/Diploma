@@ -3,7 +3,7 @@
 namespace DiplomaServices.Models
 {
     //Test model
-    public class SavePassedTestResultsModel
+    public class SavePassedTestResultsModel: AuthTemplateModel
     {
         public SavePassedTestResultsModel()
         {

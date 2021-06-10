@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using DiplomaServices.Interfaces;
+using Microsoft.AspNetCore.Cors;
 
 namespace DiplomaAPI.Controllers
 {
     [Route("api/email")]
+    [EnableCors]
     public class EmailController : ControllerBase
     {
         #region
@@ -27,7 +29,7 @@ namespace DiplomaAPI.Controllers
             {
                 emailService.SetEmailAsVerified(Convert.ToInt32(userId));
 
-                return Ok("Your email was successfuly verified!");
+                return Ok("Ваша електронна пошта була успішно підтвердежна!");
             }
             catch (Exception e)
             {

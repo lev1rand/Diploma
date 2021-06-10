@@ -24,7 +24,7 @@ namespace DiplomaServices.Services.AccountManagment
         {
                 if (uow.Users.GetSeveral(u => u.Login == account.Login).Count > 0)
                 {
-                    throw new Exception(string.Format("User with login {0} already exists!", account.Login));
+                    throw new Exception(string.Format("Користувач з електронною поштою {0} вже існує!", account.Login));
                 }
                 else
                 {

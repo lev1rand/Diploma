@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DiplomaServices.Models
 {
-    public class CreateTestModel
+    public class CreateTestModel: AuthTemplateModel
     {
         public CreateTestModel()
         {

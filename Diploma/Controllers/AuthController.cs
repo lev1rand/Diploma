@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Text;
 using DiplomaServices.Models;
 using DiplomaServices.Interfaces;
+using Microsoft.AspNetCore.Cors;
 
 namespace DiplomaAPI.Controllers
 {
     [Route("api/auth")]
     [ApiController]
+    [EnableCors]
     public class AuthController : ControllerBase
     {
         #region
@@ -31,12 +31,6 @@ namespace DiplomaAPI.Controllers
             {
                 var response = authService.SignIn(signIn);
 
-                HttpContext.Session.Set("refreshToken", Encoding.ASCII.GetBytes(response.RefreshToken));
-                HttpContext.Session.Set("accessToken", Encoding.ASCII.GetBytes(response.AccessToken));
-                HttpContext.Session.Set("userLogin", Encoding.ASCII.GetBytes(response.UserLogin));
-                HttpContext.Session.Set("userName", Encoding.ASCII.GetBytes(response.UserName));
-                HttpContext.Session.Set("userId", Encoding.ASCII.GetBytes(response.UserId));
-
                 return Ok(response);
             }
             catch (Exception e)
@@ -51,11 +45,7 @@ namespace DiplomaAPI.Controllers
         {
             try
             {
-                var userId = Convert.ToInt32(new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userId"))));
-                signOut.UserId = userId;
                 authService.SignOut(signOut);
-
-                HttpContext.Session.Clear();
 
                 return Ok();
             }
@@ -71,28 +61,9 @@ namespace DiplomaAPI.Controllers
         {
             try
             {
-                if (HttpContext.Session.Get("refreshToken") != null)
-                {
-                    var incomingRefresh = model.RefreshToken;
-                    var refreshFromSession = new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("refreshToken")));
+                var accessToken = authService.RefreshAccessToken(model);
 
-                    if (refreshFromSession == incomingRefresh)
-                    {
-                        var accessToken = authService.RefreshAccessToken();
-                        HttpContext.Session.Set("accessToken", Encoding.ASCII.GetBytes(accessToken));
-
-                        return Ok(new { AccessToken = accessToken });
-                    }
-                    else
-                    {
-                        //We can't give new access if refresh token wasn't found
-
-                        return BadRequest("Your refresh token isn't right, access denied");
-                    }
-                }
-
-                return BadRequest("Your session has expired. Please, re-login to the system.");
-
+                return Ok(accessToken);
             }
             catch (Exception e)
             {

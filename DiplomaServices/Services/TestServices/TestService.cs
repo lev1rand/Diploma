@@ -4,6 +4,8 @@ using DataAccess.Entities.TestEntities;
 using DiplomaServices.Interfaces;
 using DiplomaServices.Mapping;
 using DiplomaServices.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 
@@ -25,7 +27,7 @@ namespace DiplomaServices.Services.TestServices
 
         private readonly IAnswersService answersService;
 
-        private readonly MapperService mapper;
+        private readonly CachingService cachingService;
 
         #endregion
 
@@ -34,7 +36,8 @@ namespace DiplomaServices.Services.TestServices
             IQuestionService questionsService,
             IEmailService emailService,
             IUserService userService,
-            IAnswersService answersService)
+            IAnswersService answersService,
+            IMemoryCache cache)
         {
             this.uow = uow;
             this.courseService = courseService;
@@ -43,7 +46,7 @@ namespace DiplomaServices.Services.TestServices
             this.userService = userService;
             this.answersService = answersService;
 
-            mapper = new MapperService();
+            cachingService = new CachingService(cache);
         }
         public CreateTestModel CreateTest(CreateTestModel model)
         {
@@ -56,7 +59,7 @@ namespace DiplomaServices.Services.TestServices
             }
             else
             {
-                throw new Exception(string.Format("Course with id {0} doesn't exist!", model.CourseId));
+                throw new Exception(string.Format("Курсу із id {0} не існує!", model.CourseId));
             }
 
             test.ComplitionDate = model.DateTime;
@@ -76,7 +79,7 @@ namespace DiplomaServices.Services.TestServices
             }
             else
             {
-                throw new Exception("Test doesn't contain questions!");
+                throw new Exception("Тест не містить питань!");
             }
 
             //Add Applicants
@@ -94,8 +97,8 @@ namespace DiplomaServices.Services.TestServices
 
                     if (isExistResponse.IsFound)
                     {
-                        string messageText = string.Format("You have been subscribed to the test in the TestOn system, which will be hold on {0}. " +
-                            "Test theme: {1}.", model.DateTime, model.Theme);
+                        string messageText = string.Format("Увага! Ти став підписником на тестування у системі TestOn, яке буде проведене {0}. " +
+                            "Тестування за темою: {1}.", model.DateTime, model.Theme);
 
                         emailService.SendMessage(applicant.Login, messageText, null);
                     }
@@ -104,23 +107,47 @@ namespace DiplomaServices.Services.TestServices
 
             return null;
         }
-        public IEnumerable<Test> GetAll()
+        public IEnumerable<GetTestSimpleModel> GetAll()
         {
-            return uow.Tests.GetAll();
+            var testModels = new List<GetTestSimpleModel>();
+
+            if (uow.Tests.GetAll() == null)
+            {
+                return testModels;
+            }
+
+            foreach (var test in uow.Tests.GetSeveral(include: t => t.Include(t => t.Course)))
+            {
+
+                testModels.Add(new GetTestSimpleModel
+                {
+                    Course = new GetCourseSimpleModel
+                    {
+                        Id = test.Course.Id,
+                        Description = test.Course.Description,
+                        Name = test.Course.Name
+                    },
+                    DateTime = test.ComplitionDate,
+                    Id = test.Id
+                });
+            }
+
+            return testModels;
         }
 
         public IEnumerable<GetTestDetailsModel> GetTestDetailsByStudentId(int userId)
         {
             return null;
         }
-        public IEnumerable<decimal> ProcessTestResultSaving(SavePassedTestResultsModel testResult, int userId)
+        public IEnumerable<decimal> ProcessTestResultSaving(SavePassedTestResultsModel testResult)
         {
             var gradesForTest = new List<decimal>();
+            var userData = cachingService.GetUserAuthDataFromCache(testResult.SessionId);
 
             foreach (var question in testResult.Questions)
             {
-                answersService.SaveAnswers(question, userId, testResult.TestId);
-                var gradeForQuestion = answersService.EvaluateAnswersForQuestion(question.QuestionId, userId, question.ChosenResponseOptionIds);
+                answersService.SaveAnswers(question, userData.UserId, testResult.TestId);
+                var gradeForQuestion = answersService.EvaluateAnswersForQuestion(question.QuestionId, userData.UserId, question.ChosenResponseOptionIds);
 
                 gradesForTest.Add(gradeForQuestion);
             }

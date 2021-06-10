@@ -5,6 +5,7 @@ using System;
 using DiplomaAPI.Filters;
 using DiplomaServices.Interfaces;
 using DiplomaServices.Pagination;
+using Microsoft.AspNetCore.Cors;
 
 namespace DiplomaAPI.Controllers
 {
@@ -12,6 +13,7 @@ namespace DiplomaAPI.Controllers
     [TypeFilter(typeof(AuthFilter))]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
+    [EnableCors]
     public class UserController : ControllerBase
     {
         #region

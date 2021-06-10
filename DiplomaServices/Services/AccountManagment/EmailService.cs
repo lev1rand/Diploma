@@ -68,7 +68,7 @@ namespace DiplomaServices.Services.AccountManagment
             }
             else
             {
-                throw new Exception("user wasn't found!");
+                throw new Exception(string.Format("Користувач з id {0} не знайдений!", userId));
             }
         }
         public string GenerateConfirmationToken()
@@ -98,8 +98,8 @@ namespace DiplomaServices.Services.AccountManagment
         }
         private string GetConfirmationMessageText(string confirmationLink)
         {
-            return string.Format("Hello! Please, tab on this link {0} to verify your email and then go back to the website. " +
-                "Don't share this link with third parties! Have a good day :)", confirmationLink);
+            return string.Format("Привіт! Будь ласка, натисни на цей лінк {0}, щоб підтвердити свою електронну пошту в системі. Після цього можеш повернутися назад до веб-сайту TestOnSystem. " +
+                "Увага! Не розповсюджуй це посилання серед третіх осіб! Бажаємо гарного дня :)", confirmationLink);
         }
     }
 }

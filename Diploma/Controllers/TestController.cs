@@ -3,6 +3,7 @@ using DiplomaServices.Interfaces;
 using DiplomaServices.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,6 +16,7 @@ namespace DiplomaAPI.Controllers
     [TypeFilter(typeof(AuthFilter))]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
+    [EnableCors]
     public class TestController : ControllerBase
     {
         #region
@@ -42,7 +44,7 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTests()
+        public IActionResult GetTests(AuthTemplateModel model)
         {
             try
             {
@@ -60,8 +62,7 @@ namespace DiplomaAPI.Controllers
         {
             try
             {
-                var userId = Convert.ToInt32(new string(Encoding.ASCII.GetChars(HttpContext.Session.Get("userId"))));
-                testService.ProcessTestResultSaving(testResult, userId);
+                testService.ProcessTestResultSaving(testResult);
 
                 return Ok();
             }
@@ -71,12 +72,12 @@ namespace DiplomaAPI.Controllers
             }
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("detailed-test-result")]
         public IActionResult GetDetailedTestResultByStudentId(int studentId)
         {
             return Ok();
-        }
+        }*/
 
         //[HttpGet]
         //[Route("test-result")]
@@ -85,11 +86,11 @@ namespace DiplomaAPI.Controllers
         //    return Ok();
         //}
 
-        [HttpGet]
+       /* [HttpGet]
         [Route("for-evaluation")]
         public IActionResult GetTestsPassedForEvaluation(int studentId)
         {
             return Ok();
-        }
+        }*/
     }
 }

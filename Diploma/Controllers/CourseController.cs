@@ -3,6 +3,7 @@ using DiplomaServices.Interfaces;
 using DiplomaServices.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -12,6 +13,7 @@ namespace DiplomaAPI.Controllers
     [TypeFilter(typeof(AuthFilter))]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
+    [EnableCors]
     public class CourseController : ControllerBase
     {
         #region
@@ -26,7 +28,7 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCourse(CreateCourseModel model)
+        public IActionResult CreateCourse([FromBody]CreateCourseModel model)
         {
             try
             {
@@ -39,7 +41,7 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCourses()
+        public IActionResult GetCourses(AuthTemplateModel model)
         {
             try
             {

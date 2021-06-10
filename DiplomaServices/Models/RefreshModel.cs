@@ -1,6 +1,6 @@
 ﻿namespace DiplomaServices.Models
 {
-    public class RefreshModel
+    public class RefreshModel: AuthTemplateModel
     {
         public string RefreshToken { get; set; }
     }
