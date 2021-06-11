@@ -101,7 +101,20 @@ namespace DiplomaServices.Services.AccountManagment
 
             if (userConfig.RefreshToken == refreshModel.RefreshToken)
             {
-                return jwtService.RefreshAccessToken(userConfig.UserLogin);
+                var accessToken = jwtService.RefreshAccessToken(userConfig.UserLogin);
+
+                cachingService.RemoveData(refreshModel.SessionId);
+                cachingService.CacheUserAuthData(userConfig.RefreshToken,
+                    accessToken,
+                    new UserModel
+                    {
+                        Id = userConfig.UserId,
+                        Name = userConfig.UserName,
+                        Login = userConfig.UserLogin
+                    },
+                    refreshModel.SessionId);
+
+                return accessToken;
             }
             else
             {

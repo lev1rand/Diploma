@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DiplomaServices.Models
 {
@@ -11,6 +12,27 @@ namespace DiplomaServices.Models
         public int TestId { get; set; }
         public string Theme { get; set; }
         public List<GetQuestionForStudentModel> Questions { get; set; }
+        public int TimeLimitInMinutes { get; set; }
+        public DateTime ComplitionDate { get; set; }
+        public string CourseName { get; set; }
+    }
 
+    public class GetQuestionForStudentModel
+    {
+        public GetQuestionForStudentModel()
+        {
+            ResponseOptions = new List<GetResponseOptionForStudentModel>();
+        }
+        public int QuestionId { get; set; }
+        public string Title { get; set; }
+        public bool IsOpenQuestion { get; set; }
+        public bool IsFileQuestion { get; set; }
+        public List<GetResponseOptionForStudentModel> ResponseOptions { get; set; }
+    }
+
+    public class GetResponseOptionForStudentModel
+    {
+        public int ResponseOptionId { get; set; }
+        public string Value { get; set; }
     }
 }

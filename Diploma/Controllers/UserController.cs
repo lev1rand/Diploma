@@ -6,6 +6,7 @@ using DiplomaAPI.Filters;
 using DiplomaServices.Interfaces;
 using DiplomaServices.Pagination;
 using Microsoft.AspNetCore.Cors;
+using DiplomaServices.Models;
 
 namespace DiplomaAPI.Controllers
 {
@@ -28,7 +29,7 @@ namespace DiplomaAPI.Controllers
         }
         // GET: api/users
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public IActionResult GetAllUsers([FromQuery] AuthTemplateModel model)
         {
             try
             {

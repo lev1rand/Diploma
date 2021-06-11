@@ -14,12 +14,21 @@ namespace DiplomaServices.Services
             this.cache = cache;
         }
 
-        public string CacheUserAuthData(string refreshToken, string accessToken, UserModel user)
+        public string CacheUserAuthData(string refreshToken, string accessToken, UserModel user, string key=null)
         {
-            var key = Guid.NewGuid().ToString();
+            string sessionKey = Guid.NewGuid().ToString();
+
+            if(key == null)
+            {
+                sessionKey = Guid.NewGuid().ToString();
+            }
+            else
+            {
+                sessionKey = key;
+            }
 
             cache.Set(
-               key,
+               sessionKey,
                 new CacheUserAuthDataModel
                 {
                     AccessToken = accessToken,
@@ -33,7 +42,7 @@ namespace DiplomaServices.Services
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60)
                 });
 
-            return key;
+            return sessionKey;
         }
         public CacheUserAuthDataModel GetUserAuthDataFromCache(string key)
         {

@@ -63,7 +63,7 @@ namespace DiplomaAPI.Controllers
             {
                 var accessToken = authService.RefreshAccessToken(model);
 
-                return Ok(accessToken);
+                return Ok(new { AccessToken = accessToken });
             }
             catch (Exception e)
             {

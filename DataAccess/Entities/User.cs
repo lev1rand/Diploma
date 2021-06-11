@@ -38,7 +38,7 @@ namespace DataAccess.Entities
         [DefaultValue(null)]
         public string AccessToken { get; set; }
 
-        [DefaultValue(0)]
-        public int NotificationsCount { get; set; }
+        //[DefaultValue(0)]
+        //public int NotificationsCount { get; set; }
     }
 }

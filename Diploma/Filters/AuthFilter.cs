@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -16,16 +17,16 @@ namespace DiplomaAPI.Filters
             var service = context.HttpContext.RequestServices.GetService<IMemoryCache>();
             CacheUserAuthDataModel cacheData = null;
 
-            context.HttpContext.Request.Body.Position = 0;
-            StreamReader sr = new StreamReader(context.HttpContext.Request.Body);
-            string bodyStringified = sr.ReadToEndAsync().Result;
-            context.HttpContext.Request.Body.Position = 0;
+            var sessionId = GetSessionId(context);
 
-            var bodyData = JsonConvert.DeserializeObject<AuthTemplateModel>(bodyStringified);
+            if(sessionId == null)
+            {
+                throw new Exception("Будь ласка, вкажіть id вашої сесії (параметр sessionId).");
+            }
 
-            service.TryGetValue(bodyData.SessionId, out cacheData);
+            service.TryGetValue(sessionId, out cacheData);
 
-            if(cacheData == null)
+            if (cacheData == null)
             {
                 context.Result = new UnauthorizedResult();
             }
@@ -40,11 +41,47 @@ namespace DiplomaAPI.Filters
             {
                 context.Result = new UnauthorizedResult();
             }
+
         }
 
         public void OnAuthorizationExecuted(AuthorizationFilterContext context)
         {
 
+        }
+
+        private string GetSessionId(AuthorizationFilterContext context)
+        {
+            context.HttpContext.Request.Body.Position = 0;
+            StreamReader sr = new StreamReader(context.HttpContext.Request.Body);
+            string bodyStringified = sr.ReadToEndAsync().Result;
+            context.HttpContext.Request.Body.Position = 0;
+
+            if (bodyStringified == "")
+            {
+                StringValues queryData = "";
+                context.HttpContext.Request.Query.TryGetValue("sessionId", out queryData);
+
+                if (queryData.Count == 0)
+                {
+                    throw new Exception("Вам потрібно вказати id сесії в заголовку або тілі запиту (sessionId).");
+                }
+                else
+                {
+                    return queryData[0];
+                }
+            }
+            else
+            {
+                var bodyData = JsonConvert.DeserializeObject<AuthTemplateModel>(bodyStringified);
+                if (bodyData != null)
+                {
+                    return bodyData.SessionId;
+                }
+                else
+                {
+                    throw new Exception("Будь ласка, вкажіть id сесії в тілі або заголовку запиту (sessionId).");
+                }
+            }
         }
     }
 }

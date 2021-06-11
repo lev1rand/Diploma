@@ -4,15 +4,13 @@ using DiplomaServices.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DiplomaAPI.Controllers
 {
     [Route("api/tests")]
+   // [ExceptionFilter]
     [TypeFilter(typeof(AuthFilter))]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
@@ -44,7 +42,7 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTests(AuthTemplateModel model)
+        public IActionResult GetTests([FromQuery]AuthTemplateModel model)
         {
             try
             {
@@ -72,12 +70,21 @@ namespace DiplomaAPI.Controllers
             }
         }
 
-        /*[HttpGet]
-        [Route("detailed-test-result")]
-        public IActionResult GetDetailedTestResultByStudentId(int studentId)
+        [HttpGet]
+        [Route("test-being-passed")]
+        public IActionResult GetTestForPassing([FromQuery] AuthTemplateModel model, int testId)
         {
-            return Ok();
-        }*/
+            try
+            {
+                var response = testService.GetTestForStudentPassing(model.SessionId, testId);
+
+                return Ok(response);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         //[HttpGet]
         //[Route("test-result")]

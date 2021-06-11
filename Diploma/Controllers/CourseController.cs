@@ -41,7 +41,7 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCourses(AuthTemplateModel model)
+        public IActionResult GetCourses([FromQuery]AuthTemplateModel model)
         {
             try
             {

@@ -7,7 +7,7 @@ namespace DiplomaServices.Interfaces
     {
         public CreateTestModel CreateTest(CreateTestModel model);
         public IEnumerable<GetTestSimpleModel> GetAll();
-        public IEnumerable<GetTestDetailsModel> GetTestDetailsByStudentId(int userId);
         public IEnumerable<decimal> ProcessTestResultSaving(SavePassedTestResultsModel testResult);
+        public GetTestForStudentModel GetTestForStudentPassing(string sessionId, int testId);
     }
 }

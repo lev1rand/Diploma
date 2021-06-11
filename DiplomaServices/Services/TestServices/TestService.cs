@@ -2,7 +2,6 @@
 using DataAccess.Entities.ManyToManyEntities;
 using DataAccess.Entities.TestEntities;
 using DiplomaServices.Interfaces;
-using DiplomaServices.Mapping;
 using DiplomaServices.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,7 +12,7 @@ namespace DiplomaServices.Services.TestServices
 {
     public class TestService : ITestService
     {
-        #region private members
+        #region Fields
 
         private readonly IUnitOfWork uow;
 
@@ -30,6 +29,8 @@ namespace DiplomaServices.Services.TestServices
         private readonly CachingService cachingService;
 
         #endregion
+
+        #region Public methods
 
         public TestService(IUnitOfWork uow,
             ICourseService courseService,
@@ -134,10 +135,77 @@ namespace DiplomaServices.Services.TestServices
 
             return testModels;
         }
-
-        public IEnumerable<GetTestDetailsModel> GetTestDetailsByStudentId(int userId)
+        public GetTestForStudentModel GetTestForStudentPassing(string sessionId, int testId)
         {
-            return null;
+            var testResponseModel = new GetTestForStudentModel();
+            var questions = new List<GetQuestionForStudentModel>();
+
+            var userData = cachingService.GetUserAuthDataFromCache(sessionId);
+            if (userData == null)
+            {
+                throw new Exception(string.Format("Сесія з id не була знайдена.", sessionId));
+            }
+
+            var userTest = uow.UsersTests.Get(ut => ut.TestId == testId && ut.UserId == userData.UserId);
+            if (userTest == null)
+            {
+                throw new Exception("Ви не є підписником тестування, яке намагалися пройти!");
+            }
+
+            var testInfo = uow.Tests.Get(t => t.Id == testId, include: t => t.Include(t => t.Course));
+
+            var questionsInfo = uow.Questions.GetSeveral(q => q.TestId == testId);
+            if (questionsInfo == null || questionsInfo.Count == 0)
+            {
+                throw new Exception("Тестування не містить питань. Можливо, сталася помилка при його створенні.");
+            }
+
+            foreach (var question in questionsInfo)
+            {
+                questions.Add(new GetQuestionForStudentModel
+                {
+                    QuestionId = question.Id,
+                    IsFileQuestion = question.IsFileQuestion,
+                    IsOpenQuestion = question.IsOpenQuestion,
+                    Title = question.Title
+                });
+            }
+
+            foreach (var question in questions)
+            {
+                if (question.IsFileQuestion || question.IsOpenQuestion)
+                {
+                    testResponseModel.Questions.Add(question);
+                    continue;
+                }
+
+                var responseOptions = uow.ResponseOptions.GetSeveral(ro => ro.QuestionId == question.QuestionId);
+
+                if (responseOptions == null || responseOptions.Count == 0)
+                {
+                    throw new Exception("Тестове питання не містить варіантів відповідей. Можливо, під час створення питання Ви забули вказати прапор isOpen або isFile.");
+                }
+
+                foreach (var ro in responseOptions)
+                {
+                    question.ResponseOptions.Add(new GetResponseOptionForStudentModel
+                    {
+                        ResponseOptionId = ro.Id,
+                        Value = ro.Value
+                    });
+                }
+
+                testResponseModel.Questions.Add(question);
+            }
+
+            testResponseModel.CourseName = testInfo.Course.Name;
+            testResponseModel.TestId = testInfo.Id;
+            testResponseModel.Theme = testInfo.Theme;
+            //TODO: Add time limit for test in DB
+            testResponseModel.TimeLimitInMinutes = 30;
+            testResponseModel.ComplitionDate = testInfo.ComplitionDate;
+
+            return testResponseModel;
         }
         public IEnumerable<decimal> ProcessTestResultSaving(SavePassedTestResultsModel testResult)
         {
@@ -154,6 +222,15 @@ namespace DiplomaServices.Services.TestServices
 
             return gradesForTest;
         }
+      /*  public GetTestForEvaluationModel GetTestForEvaluationModel(int testId, int studentId)
+        {
+
+        }*/
+
+        #endregion
+
+        #region Private methods
+
         private void AddApplicants(List<CreateApplicantModel> applicants, int testId)
         {
             foreach (var applicant in applicants)
@@ -171,6 +248,8 @@ namespace DiplomaServices.Services.TestServices
 
             }
         }
+
+        #endregion
     }
 }
 

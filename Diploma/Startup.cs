@@ -22,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
+using DiplomaAPI.Filters;
 
 namespace Diploma
 {
@@ -35,7 +36,7 @@ namespace Diploma
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            string connection = Configuration.GetConnectionString("ConnectionString");
 
             services.AddDbContext<DataAccess.AppContext>(options =>
                 options.UseSqlServer(connection));
@@ -170,6 +171,7 @@ namespace Diploma
               await next(context);
           }
       ));
+            app.UseMiddleware<ExceptionsMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
