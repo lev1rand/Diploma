@@ -171,7 +171,6 @@ namespace Diploma
               await next(context);
           }
       ));
-            app.UseMiddleware<ExceptionsMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

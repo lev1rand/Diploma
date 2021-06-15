@@ -10,7 +10,7 @@ using System;
 namespace DiplomaAPI.Controllers
 {
     [Route("api/tests")]
-   // [ExceptionFilter]
+    // [ExceptionFilter]
     [TypeFilter(typeof(AuthFilter))]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
@@ -42,7 +42,7 @@ namespace DiplomaAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTests([FromQuery]AuthTemplateModel model)
+        public IActionResult GetTests([FromQuery] AuthTemplateModel model)
         {
             try
             {
@@ -80,7 +80,72 @@ namespace DiplomaAPI.Controllers
 
                 return Ok(response);
             }
-            catch(Exception e)
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("test-result-for-evaluation")]
+        public IActionResult GetTestForEvaluation([FromQuery] AuthTemplateModel model, int testId, int studentId)
+        {
+            try
+            {
+                var response = testService.GetTestForEvaluation(model.SessionId, testId, studentId);
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("save-test-result-after-evaluation")]
+        public IActionResult SaveTestAfterEvaluation(SaveTestAfterEvaluationModel model)
+        {
+            try
+            {
+                testService.SaveTestAfterEvaluation(model);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("test-result-fully-evaluated")]
+        public IActionResult GetTestResultFullyEvaluated([FromQuery] AuthTemplateModel model, int testId, int studentId)
+        {
+            try
+            {
+                 var response = testService.GetTestResultFullyEvaluated(studentId, testId);
+
+                 return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("detailed-for-student")]
+        public IActionResult GetDetailedTestsListByStudentId([FromQuery] AuthTemplateModel model, int studentId)
+        {
+            try
+            {
+                var response = testService.GetDetailedTestsListByStudentId(studentId);
+
+                return Ok(response);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -93,11 +158,11 @@ namespace DiplomaAPI.Controllers
         //    return Ok();
         //}
 
-       /* [HttpGet]
-        [Route("for-evaluation")]
-        public IActionResult GetTestsPassedForEvaluation(int studentId)
-        {
-            return Ok();
-        }*/
+        /* [HttpGet]
+         [Route("for-evaluation")]
+         public IActionResult GetTestsPassedForEvaluation(int studentId)
+         {
+             return Ok();
+         }*/
     }
 }

@@ -28,6 +28,7 @@ namespace DiplomaServices.Models
         public bool IsOpenQuestion { get; set; }
         public bool IsFileQuestion { get; set; }
         public List<GetResponseOptionForStudentModel> ResponseOptions { get; set; }
+        public int? NumberOfRightAnswers { get; set; }
     }
 
     public class GetResponseOptionForStudentModel

@@ -10,13 +10,15 @@ namespace DiplomaServices.Services.TestServices
 {
     public class QuestionService : IQuestionService
     {
-        #region private members
+        #region Fields
 
         private readonly IUnitOfWork uow;
 
         private readonly MapperService mapper;
 
         #endregion
+
+        #region Public methods
 
         public QuestionService(IUnitOfWork uow)
         {
@@ -35,11 +37,11 @@ namespace DiplomaServices.Services.TestServices
             var fullResponseOptions = CreateResponseOptionsForTheQuestion(model, question.Id);
 
             //Create RightAnswers
-            if(!model.IsFileQuestion && !model.IsOpenQuestion && fullResponseOptions != null)
+            if (!model.IsFileQuestion && !model.IsOpenQuestion && fullResponseOptions != null)
             {
                 CreateRightAnswersForTheQuestion(fullResponseOptions);
             }
-    }
+        }
 
         public List<GetQuestionModel> GetQuestionsForTheTest(int testId)
         {
@@ -50,6 +52,7 @@ namespace DiplomaServices.Services.TestServices
             {
                 var responseOptionsByQuestion = uow.ResponseOptions.GetSeveral(rp => rp.QuestionId == question.Id);
                 var getResponseOptions = new List<GetResponseOptionModel>();
+                var rightResponseOptionIds = GetRightResponseOptionIdsForQuestion(question.Id);
 
                 foreach (var item in responseOptionsByQuestion)
                 {
@@ -58,18 +61,112 @@ namespace DiplomaServices.Services.TestServices
 
                 var responseQuestionModel = new GetQuestionModel()
                 {
+                    Id = question.Id,
                     Title = question.Title,
                     ResponseOptions = getResponseOptions,
                     IsFileQuestion = question.IsFileQuestion,
-                    IsOpenQuestion = question.IsOpenQuestion
+                    IsOpenQuestion = question.IsOpenQuestion,
+                    MaxGrade = CountGradeForQuestion(question.Id, rightResponseOptionIds)
                 };
 
                 responseQuestionModels.Add(responseQuestionModel);
             }
-            
+
             return responseQuestionModels;
         }
+        public List<GetDetailedQuestionModel> GetDetailedQuestionsForTheTest(int testId)
+        {
+            var questions = uow.Questions.GetSeveral(q => q.TestId == testId);
+            var responseQuestionModels = new List<GetDetailedQuestionModel>();
 
+            foreach (var question in questions)
+            {
+                var responseOptionsByQuestion = uow.ResponseOptions.GetSeveral(rp => rp.QuestionId == question.Id);
+                var getResponseOptions = new List<GetDetailedResponseOptionModel>();
+                var rightResponseOptionIds = GetRightResponseOptionIdsForQuestion(question.Id);
+
+                foreach (var item in responseOptionsByQuestion)
+                {
+                    getResponseOptions.Add(new GetDetailedResponseOptionModel { Value = item.Value, ResponseOptionId = item.Id });
+                }
+
+                var responseQuestionModel = new GetDetailedQuestionModel()
+                {
+                    QuestionId = question.Id,
+                    Title = question.Title,
+                    ResponseOptions = getResponseOptions,
+                    IsFileQuestion = question.IsFileQuestion,
+                    IsOpenQuestion = question.IsOpenQuestion,
+                    MaxGrade = CountGradeForQuestion(question.Id, rightResponseOptionIds)
+                };
+
+                responseQuestionModels.Add(responseQuestionModel);
+            }
+
+            return responseQuestionModels;
+        }
+        public int CountNumberOfValidAnswers(CreateQuestionModel model)
+        {
+            var numberOfValidAnswers = 0;
+
+            foreach (var responseOption in model.ResponseOptions)
+            {
+                if (responseOption.IsValid)
+                {
+                    numberOfValidAnswers++;
+                }
+            }
+
+            return numberOfValidAnswers;
+        }
+        public decimal CountGradeForQuestion(int questionId, List<int> chosenROIds)
+        {
+            decimal grade = 0;
+
+            var question = uow.Questions.Get(q => q.Id == questionId);
+
+            if (!question.IsFileQuestion && !question.IsOpenQuestion)
+            {
+                if (chosenROIds.Count == 0)
+                {
+                    return grade;
+                }
+                else
+                {
+                    foreach (var roId in chosenROIds)
+                    {
+                        var rightSimpleAnswer = uow.RightSimpleAnswers.Get(rsa => rsa.ResponseOptionId == roId);
+
+                        if (rightSimpleAnswer != null)
+                        {
+                            grade += rightSimpleAnswer.Grade;
+                        }
+                    }
+                }
+            }
+
+            return grade;
+        }
+        public List<int> GetRightResponseOptionIdsForQuestion(int questionId)
+        {
+            var responseOptions = uow.ResponseOptions.GetSeveral(ro => ro.QuestionId == questionId);
+            var rightResponseOptionIds = new List<int>();
+
+            foreach (var ro in responseOptions)
+            {
+                var rightSimpleAnswers = uow.RightSimpleAnswers.GetSeveral(rsa => rsa.ResponseOptionId == ro.Id);
+                foreach (var rsa in rightSimpleAnswers)
+                {
+                    rightResponseOptionIds.Add(rsa.ResponseOptionId);
+                }
+            }
+
+            return rightResponseOptionIds;
+        }
+
+        #endregion
+
+        #region Private methods
         private IEnumerable<CreateResponseOptionModelWithId> CreateResponseOptionsForTheQuestion(CreateQuestionModel model, int questionId)
         {
             List<CreateResponseOptionModelWithId> fullResponseOptions = new List<CreateResponseOptionModelWithId>();
@@ -84,7 +181,7 @@ namespace DiplomaServices.Services.TestServices
 
                     if (numberOfValidAnswers > 1)
                     {
-                        grade = model.Grade/ numberOfValidAnswers;
+                        grade = model.Grade / numberOfValidAnswers;
                     }
                     else
                     {
@@ -96,7 +193,7 @@ namespace DiplomaServices.Services.TestServices
 
                     uow.ResponseOptions.Create(responseOptionEntity);
                     uow.Save();
-                    
+
                     fullResponseOptions.Add(new CreateResponseOptionModelWithId
                     {
                         Id = responseOptionEntity.Id,
@@ -127,26 +224,15 @@ namespace DiplomaServices.Services.TestServices
                 }
             }
 
-            foreach(var rightAnswer in rightAnswersToCreate)
+            foreach (var rightAnswer in rightAnswersToCreate)
             {
                 uow.RightSimpleAnswers.Create(mapper.Map<CreateRightAnswerModel, RightSimpleAnswer>(rightAnswer));
                 uow.Save();
             }
         }
 
-        private decimal CountNumberOfValidAnswers(CreateQuestionModel model)
-        {
-            var numberOfValidAnswers = 0;
+        #endregion
 
-            foreach (var responseOption in model.ResponseOptions)
-            {
-                if (responseOption.IsValid)
-                {
-                    numberOfValidAnswers++;
-                }
-            }
-
-            return numberOfValidAnswers;
-        }
     }
 }
+ 

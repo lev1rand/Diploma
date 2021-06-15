@@ -7,5 +7,8 @@ namespace DiplomaServices.Interfaces
     {
         public void CreateQuestion(CreateQuestionModel model);
         public List<GetQuestionModel> GetQuestionsForTheTest(int testId);
+        public decimal CountGradeForQuestion(int questionId, List<int> chosenROIds);
+        public List<int> GetRightResponseOptionIdsForQuestion(int questionId);
+        public List<GetDetailedQuestionModel> GetDetailedQuestionsForTheTest(int testId);
     }
 }

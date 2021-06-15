@@ -6,7 +6,7 @@ namespace DiplomaServices.Models
     {
         public GetTestForEvaluationModel()
         {
-
+            Questions = new List<GetQuestionForEvaluationModel>();
         }
         public int TestId { get; set; }
         public int StudentId { get; set; }
@@ -18,18 +18,22 @@ namespace DiplomaServices.Models
 
     public class GetQuestionForEvaluationModel
     {
+        public GetQuestionForEvaluationModel()
+        {
+            UserAnswers = new List<GetUserAnswerForEvaluationModel>();
+        }
         public int QuestionId { get; set; }
         public string QuestionTitle { get; set; }
         public bool IsOpenQuestion { get; set; }
         public bool IsFileQuestion { get; set; }
-        public GetUserAnswerForEvaluationModel UserAnswer { get; set; }
+        public List<GetUserAnswerForEvaluationModel> UserAnswers { get; set; }
+        public decimal? SummaryGrade { get; set; }
+        public decimal? AnswerMaxGrade { get; set; }
     }
 
     public class GetUserAnswerForEvaluationModel
     {
         public int? ResponseOptionId { get; set; }
         public string Value { get; set; }
-        public int? SummaryGrade { get; set; }
-        public int? AnswerMaxGrade { get; set; }
     }
 }

@@ -7,7 +7,11 @@ namespace DiplomaServices.Interfaces
     {
         public CreateTestModel CreateTest(CreateTestModel model);
         public IEnumerable<GetTestSimpleModel> GetAll();
-        public IEnumerable<decimal> ProcessTestResultSaving(SavePassedTestResultsModel testResult);
+        public void ProcessTestResultSaving(SavePassedTestResultsModel testResult);
         public GetTestForStudentModel GetTestForStudentPassing(string sessionId, int testId);
+        public GetTestForEvaluationModel GetTestForEvaluation (string sessionId, int testId, int studentId);
+        public void SaveTestAfterEvaluation(SaveTestAfterEvaluationModel model);
+        public List<GetDetailedTestModel> GetDetailedTestsListByStudentId(int studentId);
+        public GetTestResultFullyEvaluatedModel GetTestResultFullyEvaluated(int studentId, int testId);
     }
 }

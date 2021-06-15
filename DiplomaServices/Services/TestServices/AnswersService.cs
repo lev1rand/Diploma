@@ -13,15 +13,23 @@ namespace DiplomaServices.Services.TestServices
     public class AnswersService : IAnswersService
     {
 
-        #region private members
+        #region Fields
 
         private readonly IUnitOfWork uow;
 
+        private readonly IQuestionService questionService;
+
+        private const string MAIN_FOLDER_RELATIVE_PATH = @"..\FiledAnswers\";
+
         #endregion
 
-        public AnswersService(IUnitOfWork uow)
+        #region Public methods
+
+        public AnswersService(IUnitOfWork uow,
+            IQuestionService questionService)
         {
             this.uow = uow;
+            this.questionService = questionService;
         }
         public void SaveAnswers(SavePassedTestResultQuestionModel questionWithAnswers, int userId, int testId)
         {
@@ -39,21 +47,115 @@ namespace DiplomaServices.Services.TestServices
             {
                 SaveUsualAnswer(userId, question.Id, questionWithAnswers.ChosenResponseOptionIds);
             }
+
+            uow.Save();
         }
 
-
-        public decimal EvaluateAnswersForQuestion(int questionId, int userId, List<int> chosenROIds)
+        public List<GetUserAnswerForEvaluationModel> GetUserAnswersForEvaluation(int questionId, int userId)
         {
-            var grade = CountGradeForQuestion(questionId, chosenROIds);
+            var userAnswersResponseList = new List<GetUserAnswerForEvaluationModel>();
 
-            return grade;
+            var userAnswers = uow.UserAnswers.GetSeveral(ua => ua.QuestionId == questionId && ua.UserId == userId,
+                include: ua => ua
+                .Include(ua => ua.Question)
+                .Include(ua => ua.ResponseOption));
+
+            if (userAnswers == null)
+            {
+                return new List<GetUserAnswerForEvaluationModel>();
+            }
+
+            var question = uow.Questions.Get(q => q.Id == questionId);
+
+            if (question.IsFileQuestion)
+            {
+                userAnswersResponseList.Add(new GetUserAnswerForEvaluationModel
+                {
+                    Value = GetFiledAnswer(userId, questionId)
+                });
+
+                return userAnswersResponseList;
+            }
+            else
+            {
+
+                foreach (var userAnswer in userAnswers)
+                {
+                    var userAnswerResponse = new GetUserAnswerForEvaluationModel { Value = userAnswer.Value };
+
+                    if (!question.IsOpenQuestion)
+                    {
+                        userAnswerResponse.ResponseOptionId = userAnswer.ResponseOptionId;
+                    }
+
+                    userAnswersResponseList.Add(userAnswerResponse);
+                }
+
+                return userAnswersResponseList;
+            }
         }
+        public void EvaluateAnswersForQuestion(int questionId, int userId, List<int> chosenROIds, decimal? openQuestionGrade)
+        {
+            var question = uow.Questions.Get(q => q.Id == questionId);
+            var userAnswer = uow.UserAnswers.Get(ua => ua.QuestionId == questionId);
+
+            if ((question.IsFileQuestion || question.IsOpenQuestion) && openQuestionGrade != null)
+            {
+                uow.TestResults.Create(new TestResult
+                {
+                    UserAnswerId = userAnswer.Id,
+                    SummaryGrade = openQuestionGrade.Value
+                });
+            }
+            else
+            if(question.IsFileQuestion || question.IsOpenQuestion)
+            {
+                uow.TestResults.Create(new TestResult
+                {
+                    UserAnswerId = userAnswer.Id
+                });
+            }
+            else
+            {
+                var grade = questionService.CountGradeForQuestion(questionId, chosenROIds);
+
+                uow.TestResults.Create(new TestResult
+                {
+                    UserAnswerId = userAnswer.Id,
+                    SummaryGrade = grade
+                });
+            }
+
+            uow.Save();
+        }
+        public string GetFiledAnswer(int userId, int questionId)
+        {
+            var userAnswer = uow.UserAnswers.Get(ua => ua.QuestionId == questionId && ua.UserId == userId);
+            if (userAnswer == null)
+            {
+                return string.Empty;
+            }
+
+            var fileEncodedToBase64 = Convert.ToBase64String(File.ReadAllBytes(userAnswer.Value));
+
+            return fileEncodedToBase64;
+        }
+
+        #endregion 
+
+        #region Private methods
 
         private void SaveFiledAnswer(int userId, int questionId, int testId, string fileName, string value)
         {
             var generatedFileName = CreateFileName(userId, testId, questionId);
             var fileExtension = Path.GetExtension(fileName);
-            var filePath = string.Format(@"..\Diploma\FiledAnswers\{0}{1}", generatedFileName, fileExtension);
+
+            if (!Directory.Exists(MAIN_FOLDER_RELATIVE_PATH))
+            {
+                Directory.CreateDirectory(MAIN_FOLDER_RELATIVE_PATH);
+            }
+
+            var filePath = string.Format(@"{0}{1}{2}", MAIN_FOLDER_RELATIVE_PATH, generatedFileName, fileExtension);
 
             var spl = value.Split('/')[1];
             var format = spl.Split(';')[0];
@@ -71,7 +173,6 @@ namespace DiplomaServices.Services.TestServices
 
             uow.Save();
         }
-
         private void SaveOpenAnswer(int userId, int questionId, string answerValue)
         {
             var answer = new UserAnswer
@@ -85,7 +186,6 @@ namespace DiplomaServices.Services.TestServices
 
             uow.Save();
         }
-
         private void SaveUsualAnswer(int userId, int questionId, List<int> chosenROIds)
         {
             foreach (var roId in chosenROIds)
@@ -105,43 +205,11 @@ namespace DiplomaServices.Services.TestServices
                 }
             }
         }
-
         private string CreateFileName(int userId, int testId, int questionId)
         {
             return string.Format("{0}_{1}_{2}", userId, testId, questionId);
         }
 
-        private decimal CountGradeForQuestion(int questionId, List<int>chosenROIds)
-        {
-            decimal grade = 0;
-
-            var question = uow.Questions.Get(q => q.Id == questionId);
-
-            if (!question.IsFileQuestion && !question.IsOpenQuestion)
-            {
-                if(chosenROIds.Count == 0)
-                {
-                    return grade;
-                }
-                else
-                {
-                    foreach (var roId in chosenROIds)
-                    {
-                        var rightSimpleAnswer = uow.RightSimpleAnswers.Get(rsa => rsa.ResponseOptionId == roId);
-
-                        if (rightSimpleAnswer == null)
-                        {
-                            return grade;
-                        }
-                        else
-                        {
-                            grade += rightSimpleAnswer.Grade;
-                        }
-                    }
-                }
-            }
-
-            return grade;
-        }
+        #endregion
     }
 }
